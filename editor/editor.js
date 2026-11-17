@@ -1,5 +1,5 @@
 const artistId = location.pathname.match(/\/artist\/([^/]+)/)?.[1];
-const API = `/api/artist/${artistId}/projects`;
+const API = "/api";
 
 const scroll = document.querySelector("#canvasScroll");
 const canvas = new fabric.Canvas("canvas", {
@@ -33,46 +33,74 @@ canvas.on("object:modified", snapshot);
 canvas.on("object:removed", snapshot);
 
 function save() {
+  if (!current) return;
+
   clearTimeout(saveTimer);
   document.querySelector("#status").textContent = "EDITING...";
 
   saveTimer = setTimeout(async () => {
     try {
-      await fetch(API, {
+      const response = await fetch(`/api/canvas/${current.canvas_key}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ projects })
+        body: JSON.stringify({
+          canvas: canvas.toJSON()
+        })
       });
+
+      if (!response.ok) throw new Error("Save failed");
+
       document.querySelector("#status").textContent = "SAVED ✓";
-    } catch {
+
+    } catch (error) {
+      console.error(error);
       document.querySelector("#status").textContent = "SAVE ERROR!";
     }
   }, 700);
 }
 
-function loadProject(p) {
+async function loadProject(p) {
   current = p;
   undoStack = [];
   redoStack = [];
 
-  restoring = true;
-  canvas.clear();
-  canvas.backgroundColor = "#e8e6dd";
+  document.querySelector("#status").textContent = "LOADING...";
 
-  if (p.data) canvas.loadFromJSON(p.data, () => {
+  try {
+    const response = await fetch(`/api/canvas/${p.canvas_key}`);
+
+    if (!response.ok) throw new Error("Could not load canvas");
+
+    const result = await response.json();
+
+    restoring = true;
+    canvas.clear();
+    canvas.backgroundColor = "#e8e6dd";
+
+    if (result.canvas) {
+      await canvas.loadFromJSON(result.canvas);
+    }
+
     restoring = false;
     canvas.renderAll();
-    undoStack.push(JSON.stringify(canvas.toJSON()));
-  });
-  else {
-    restoring = false;
-    undoStack.push(JSON.stringify(canvas.toJSON()));
-  }
+    undoStack = [JSON.stringify(canvas.toJSON())];
+    redoStack = [];
 
-  document.querySelector("#pageName").textContent = p.name;
-  document.querySelectorAll(".project").forEach(el =>
-    el.classList.toggle("active", el.dataset.id === p.id)
-  );
+    undoStack.push(JSON.stringify(canvas.toJSON()));
+
+    document.querySelector("#pageName").textContent = p.artist_name;
+
+    document.querySelectorAll(".project").forEach(el =>
+      el.classList.toggle("active", el.dataset.id === p.id)
+    );
+
+    document.querySelector("#status").textContent = "SAVED ✓";
+
+  } catch (error) {
+    restoring = false;
+    console.error(error);
+    document.querySelector("#status").textContent = "LOAD ERROR";
+  }
 }
 
 function renderProjects() {
@@ -83,30 +111,32 @@ function renderProjects() {
     const el = document.createElement("div");
     el.className = "project";
     el.dataset.id = p.id;
-    el.textContent = p.name;
+    el.textContent = p.artist_name;
+
     el.onclick = () => loadProject(p);
+
     list.append(el);
   });
 }
 
 async function init() {
-  if (!artistId) throw new Error("Artist ID missing");
+  const response = await fetch("/api/canvases");
 
-  const response = await fetch(API);
   if (!response.ok) throw new Error("Could not load projects");
 
   projects = await response.json();
 
-  if (!projects.length) {
-    projects = [{
-      id: crypto.randomUUID(),
-      name: "01 / UNTITLED",
-      data: null
-    }];
-  }
-
   renderProjects();
-  loadProject(projects[0]);
+
+  const id = artistId.match(/-(\d+)$/)?.[1];
+
+  const selected = projects.find(p => String(p.id) === id);
+
+  if (selected) {
+    await loadProject(selected);
+  } else if (projects.length) {
+    await loadProject(projects[0]);
+  }
 }
 
 function addText() {
