@@ -7,6 +7,15 @@ const canvas = new fabric.Canvas("canvas", {
   selection: true
 });
 
+canvas.toObject = (function(toObject) {
+    return function(propertiesToInclude) {
+        return toObject.call(this, [
+            ...(propertiesToInclude || []),
+            "isEventInfo"
+        ]);
+    };
+})(canvas.toObject);
+
 canvas.setDimensions({
   width: Math.min(scroll.clientWidth, 1100),
   height: 1800
@@ -124,14 +133,20 @@ async function loadProject(p) {
             .filter(Boolean)
             .join("   ·   ");
 
-        canvas.getObjects().forEach(obj => {
-            if (
-                (obj.type === "i-text" || obj.type === "text") &&
-                obj.text?.trim() === "Riverrrr"
-            ) {
-                obj.set("text", eventText);
-            }
+       canvas.getObjects().forEach(obj => {
+    if (
+        (obj.type === "i-text" || obj.type === "text") &&
+        (
+            obj.text?.trim() === "Riverrrr" ||
+            obj.isEventInfo === true
+        )
+    ) {
+        obj.set({
+            text: eventText,
+            isEventInfo: true
         });
+    }
+});
 
         canvas.renderAll();
 
@@ -186,7 +201,7 @@ async function init() {
 
   renderProjects();
 
-  const id = artistId.match(/-(\d+)$/)?.[1];
+  const id = artistId?.match(/-(\d+)$/)?.[1];
 
   const selected = projects.find(p => String(p.id) === id);
 
