@@ -146,18 +146,36 @@ aside label {
   max-width: 100%;
 }
 
-body.preview header,
-body.preview aside,
-body.preview .page-info {
+.logo {
+  color: white;
+  text-decoration: none;
+  font-size: 24px;
+  font-weight: bold;
+  letter-spacing: -2px;
+}
+
+body.preview #toolbar {
   display: none;
 }
 
+body.preview header {
+  justify-content: flex-start;
+}
+
 body.preview main {
-  height: 100dvh;
+  height: calc(100dvh - 68px);
+}
+
+body.preview aside {
+  display: block;
+}
+
+body.preview .page-info {
+  display: flex;
 }
 
 body.preview .workspace {
-  padding: 0;
+  padding: 12px;
 }
 
 body.preview #canvasScroll {

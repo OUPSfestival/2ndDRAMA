@@ -269,9 +269,18 @@ document.querySelector("#redo").onclick = () => {
 };
 
 document.querySelector("#preview").onclick = () => {
-  document.body.classList.toggle("preview");
-  canvas.selection = document.body.classList.contains("preview");
-  canvas.forEachObject(o => o.selectable = !canvas.selection);
+  const preview = document.body.classList.toggle("preview");
+
+  document.querySelector("#preview").textContent =
+    preview ? "EDIT" : "PREVIEW ↗";
+
+  canvas.selection = !preview;
+
+  canvas.forEachObject(o => {
+    o.selectable = !preview;
+    o.evented = !preview;
+  });
+
   canvas.discardActiveObject();
   canvas.renderAll();
 };
