@@ -1,0 +1,150 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OUPS! Artists</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: #171715;
+            color: #EAE7DF;
+            font: 12px Arial, sans-serif;
+        }
+
+        header {
+            height: 65px;
+            padding: 0 25px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid #414039;
+        }
+
+        .logo {
+            font-size: 25px;
+            font-weight: bold;
+            letter-spacing: -1.5px;
+        }
+
+        #artist-name {
+            font-size: 12px;
+            font-weight: normal;
+            letter-spacing: 1px;
+        }
+
+        #artist-date {
+            color: #A09D93;
+            font: 10px monospace;
+        }
+
+        .workspace {
+            display: flex;
+            height: calc(100vh - 65px);
+        }
+
+        .sidebar {
+            width: 220px;
+            flex-shrink: 0;
+            padding: 25px 18px;
+            background: #1D1D1A;
+            border-right: 1px solid #414039;
+            overflow-y: auto;
+        }
+
+        .sidebar h3 {
+            margin: 0 0 25px;
+            color: #A09D93;
+            font: 10px monospace;
+            letter-spacing: .08em;
+        }
+
+        .event {
+            display: block;
+            padding: 12px 10px;
+            margin-bottom: 2px;
+            color: #A09D93;
+            border: 1px solid transparent;
+            text-decoration: none;
+            font: 11px monospace;
+        }
+
+        .event:hover {
+            background: #22221F;
+        }
+
+        .event.active {
+            background: #292822;
+            border-color: #414039;
+            border-left: 2px solid #B15E43;
+            color: #EAE7DF;
+        }
+
+        .event small {
+            display: block;
+            margin-top: 7px;
+            color: #706E65;
+            font-size: 9px;
+        }
+
+        .canvas-area {
+            flex: 1;
+            min-width: 0;
+            overflow: hidden;
+            background: #20201F;
+        }
+
+        #canvas-container {
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background: #20201F;
+        }
+
+        @media (max-width: 700px) {
+            .sidebar {
+                width: 145px;
+                padding: 20px 10px;
+            }
+
+            header {
+                padding: 0 15px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <div class="logo">OUPS!</div>
+
+        <h1 id="artist-name">Loading artist...</h1>
+
+        <div id="artist-date"></div>
+    </header>
+
+    <main class="workspace">
+
+        <aside class="sidebar">
+            <h3>PROJECTS</h3>
+            <nav id="event-list"></nav>
+        </aside>
+
+        <section class="canvas-area">
+            <div id="canvas-container"></div>
+        </section>
+
+    </main>
+
+    <script src="https://unpkg.com/konva@9/konva.min.js"></script>
+    <script src="/artist-preview.js?v=2"></script>
+
+</body>
+</html>
