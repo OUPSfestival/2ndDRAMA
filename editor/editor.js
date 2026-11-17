@@ -50,29 +50,40 @@ canvas.on("object:added", snapshot);
 canvas.on("object:modified", snapshot);
 canvas.on("object:removed", snapshot);
 
+
+
 function save() {
   if (!current) return;
 
   clearTimeout(saveTimer);
+
+  const projectKey = current.canvas_key;
+  const canvasData = canvas.toJSON();
+
   document.querySelector("#status").textContent = "EDITING...";
 
   saveTimer = setTimeout(async () => {
     try {
-      const response = await fetch(`/api/canvas/${current.canvas_key}`, {
+      const response = await fetch(`/api/canvas/${projectKey}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          canvas: canvas.toJSON()
+          canvas: canvasData
         })
       });
 
       if (!response.ok) throw new Error("Save failed");
 
-      document.querySelector("#status").textContent = "SAVED ✓";
+      if (current?.canvas_key === projectKey) {
+        document.querySelector("#status").textContent = "SAVED ✓";
+      }
 
     } catch (error) {
       console.error(error);
-      document.querySelector("#status").textContent = "SAVE ERROR!";
+
+      if (current?.canvas_key === projectKey) {
+        document.querySelector("#status").textContent = "SAVE ERROR!";
+      }
     }
   }, 700);
 }
@@ -160,11 +171,15 @@ canvas.getObjects().forEach(obj => {
 }
 
 
+
 function renderProjects() {
   const list = document.querySelector("#projects");
   list.innerHTML = "";
 
   projects.forEach(p => {
+    const row = document.createElement("div");
+    row.className = "project-row";
+
     const el = document.createElement("div");
     el.className = "project";
     el.dataset.id = p.id;
@@ -172,9 +187,62 @@ function renderProjects() {
 
     el.onclick = () => loadProject(p);
 
-    list.append(el);
+    const deleteBtn = document.createElement("button");
+    deleteBtn.className = "delete-project";
+    deleteBtn.textContent = "DELETE";
+
+    deleteBtn.onclick = async (e) => {
+      e.stopPropagation();
+
+      const confirmed = confirm(
+        `Are you sure you want to delete "${p.artist_name}"? This will also delete its canvas permanently.`
+      );
+
+      if (!confirmed) return;
+
+      try {
+        const response = await fetch(`/api/events/${p.id}`, {
+          method: "DELETE"
+        });
+
+        if (!response.ok) {
+          throw new Error("Could not delete project");
+        }
+
+        // Remove project from local list
+        projects = projects.filter(project => project.id !== p.id);
+
+        // If deleted project was selected, load another one
+        if (current && String(current.id) === String(p.id)) {
+        current = null;
+        clearTimeout(saveTimer);
+
+        if (projects.length) {
+          await loadProject(projects[0]);
+        } else {
+          canvas.clear();
+          canvas.renderAll();
+
+          document.querySelector("#pageName").textContent = "NO PROJECT";
+          document.querySelector("#status").textContent = "NO PROJECTS";
+
+          history.pushState({}, "", "/");
+        }
+      }
+
+        renderProjects();
+
+      } catch (error) {
+        console.error(error);
+        alert("Could not delete project.");
+      }
+    };
+
+    row.append(el, deleteBtn);
+    list.append(row);
   });
 }
+
 
 
 async function init() {

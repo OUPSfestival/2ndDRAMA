@@ -118,6 +118,37 @@ aside label {
   font-weight: bold;
 }
 
+
+.project-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.project-row .project {
+  flex: 1;
+  min-width: 0;
+  cursor: pointer;
+}
+
+.delete-project {
+  border: 0;
+  background: transparent;
+  color: #c0392b;
+  cursor: pointer;
+  font-size: 10px;
+  font-weight: bold;
+  padding: 8px;
+  flex-shrink: 0;
+}
+
+.delete-project:hover {
+  background: #c0392b;
+  color: white;
+}
+
+
 .workspace {
   flex: 1;
   min-width: 0;
