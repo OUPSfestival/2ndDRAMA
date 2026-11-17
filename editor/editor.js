@@ -7,15 +7,6 @@ const canvas = new fabric.Canvas("canvas", {
   selection: true
 });
 
-canvas.toObject = (function(toObject) {
-    return function(propertiesToInclude) {
-        return toObject.call(this, [
-            ...(propertiesToInclude || []),
-            "isEventInfo"
-        ]);
-    };
-})(canvas.toObject);
-
 canvas.setDimensions({
   width: Math.min(scroll.clientWidth, 1100),
   height: 1800
@@ -68,25 +59,6 @@ function save() {
   }, 700);
 }
 
-
-
-function formatCoordinates(lat, lng) {
-    function format(value, positive, negative) {
-        const direction = value >= 0 ? positive : negative;
-        const absolute = Math.abs(value);
-
-        const degrees = Math.floor(absolute);
-        const minutesFloat = (absolute - degrees) * 60;
-        const minutes = Math.floor(minutesFloat);
-        const seconds = ((minutesFloat - minutes) * 60).toFixed(1);
-
-        return `${degrees}°${String(minutes).padStart(2, "0")}'${String(seconds).padStart(4, "0")}"${direction}`;
-    }
-
-    return `${format(lat, "N", "S")} ${format(lng, "E", "W")}`;
-}
-
-
 async function loadProject(p) {
   current = p;
   undoStack = [];
@@ -105,54 +77,9 @@ async function loadProject(p) {
     canvas.clear();
     canvas.backgroundColor = "#e8e6dd";
 
-
-    
-            if (result.canvas) {
-            await canvas.loadFromJSON(result.canvas);
-        }
-
-        // Replace Riverrrr with event details
-        const date = p.event_date
-            ? new Date(p.event_date + "T00:00:00").toLocaleDateString("en-GB", {
-                day: "2-digit",
-                month: "long",
-                year: "numeric"
-            }).toUpperCase()
-            : "";
-
-        const time = p.event_time
-            ? String(p.event_time).slice(0, 5)
-            : "";
-
-        const coordinates =
-            p.latitude != null && p.longitude != null
-                ? formatCoordinates(p.latitude, p.longitude)
-                : "";
-
-        const eventText = [date, time, coordinates]
-            .filter(Boolean)
-            .join("   ·   ");
-
-       canvas.getObjects().forEach(obj => {
-    if (
-        (obj.type === "i-text" || obj.type === "text") &&
-        (
-            obj.text?.trim() === "Riverrrr" ||
-            obj.isEventInfo === true
-        )
-    ) {
-        obj.set({
-            text: eventText,
-            isEventInfo: true
-        });
+    if (result.canvas) {
+      await canvas.loadFromJSON(result.canvas);
     }
-});
-
-        canvas.renderAll();
-
-
-
-
 
     restoring = false;
     canvas.renderAll();
@@ -201,7 +128,7 @@ async function init() {
 
   renderProjects();
 
-  const id = artistId?.match(/-(\d+)$/)?.[1];
+  const id = artistId.match(/-(\d+)$/)?.[1];
 
   const selected = projects.find(p => String(p.id) === id);
 
@@ -345,7 +272,7 @@ document.querySelector("#preview").onclick = () => {
   const preview = document.body.classList.toggle("preview");
 
   document.querySelector("#preview").textContent =
-    preview ? "EDIT" : "PREVIEW ↗";
+    preview ? "EDIT" : "PREVIEW";
 
   canvas.selection = !preview;
 
@@ -388,10 +315,6 @@ document.addEventListener("keydown", e => {
 
 canvas.freeDrawingBrush.width = 2;
 canvas.freeDrawingBrush.color = "#111111";
-
-if (!location.pathname.endsWith('/edit')) {
-  document.body.classList.add('preview');
-}
 
 init().catch(err => {
   document.querySelector("#status").textContent = "LOAD ERROR";
