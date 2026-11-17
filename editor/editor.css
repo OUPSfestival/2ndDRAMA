@@ -28,11 +28,11 @@ header {
     margin: 0;
 }
 
-.logo small {
+header .logo small {
   font-family: Arial, sans-serif;
   display: block;
   font-size: 9px;
-  color: #c684c0;
+  color: #c684c0 !important;
   margin-top: 4px;
 }
 
