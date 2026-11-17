@@ -1,6 +1,24 @@
 const artistId = location.pathname.match(/\/artist\/([^/]+)/)?.[1];
 const API = "/api";
 
+function updateProjectURL(p) {
+  const slug = String(p.artist_name)
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
+
+  const newURL = `/artist/${slug}-${p.id}/edit`;
+
+  history.pushState(
+    { projectId: p.id },
+    "",
+    newURL
+  );
+}
+
 const scroll = document.querySelector("#canvasScroll");
 const canvas = new fabric.Canvas("canvas", {
   preserveObjectStacking: true,
@@ -62,8 +80,15 @@ function save() {
 
 
 
-async function loadProject(p) {
+async function loadProject(p, updateURL = true) {
   current = p;
+
+
+  // Update browser URL when switching projects
+if (updateURL) {
+  updateProjectURL(p);
+}
+
   undoStack = [];
   redoStack = [];
 
@@ -80,41 +105,38 @@ async function loadProject(p) {
     canvas.clear();
     canvas.backgroundColor = "#e8e6dd";
 
-      if (result.canvas) {
+    if (result.canvas) {
       await canvas.loadFromJSON(result.canvas);
+    }
+
+    const eventText = [
+      p.event_date || "DATE",
+      p.event_time || "TIME",
+      p.latitude != null && p.longitude != null
+        ? formatCoordinates(p.latitude, p.longitude)
+        : "LOCATION"
+    ].join("   ·   ");
+
+    canvas.getObjects().forEach(obj => {
+      if (
+        (obj.type === "i-text" || obj.type === "text") &&
+        obj.text?.trim() === "Riverrrr"
+      ) {
+        obj.set("text", eventText);
       }
+    });
 
-      // Replace Riverrrr with event information
-      const eventText = [
-        p.event_date || "DATE",
-        p.event_time || "TIME",
-        p.latitude != null && p.longitude != null
-          ? formatCoordinates(p.latitude, p.longitude)
-          : "LOCATION"
-      ].join("   ·   ");
-
-      canvas.getObjects().forEach(obj => {
-        if (
-          (obj.type === "i-text" || obj.type === "text") &&
-          obj.text?.trim() === "Riverrrr"
-        ) {
-          obj.set("text", eventText);
-        }
-      });
-
-      canvas.renderAll();
+    canvas.renderAll();
 
     restoring = false;
-    canvas.renderAll();
+
     undoStack = [JSON.stringify(canvas.toJSON())];
     redoStack = [];
-
-    undoStack.push(JSON.stringify(canvas.toJSON()));
 
     document.querySelector("#pageName").textContent = p.artist_name;
 
     document.querySelectorAll(".project").forEach(el =>
-      el.classList.toggle("active", el.dataset.id === p.id)
+      el.classList.toggle("active", el.dataset.id === String(p.id))
     );
 
     document.querySelector("#status").textContent = "SAVED ✓";
@@ -125,6 +147,7 @@ async function loadProject(p) {
     document.querySelector("#status").textContent = "LOAD ERROR";
   }
 }
+
 
 function renderProjects() {
   const list = document.querySelector("#projects");
@@ -142,6 +165,7 @@ function renderProjects() {
   });
 }
 
+
 async function init() {
   const response = await fetch("/api/canvases");
 
@@ -151,16 +175,18 @@ async function init() {
 
   renderProjects();
 
-  const id = artistId.match(/-(\d+)$/)?.[1];
+  const match = location.pathname.match(/\/artist\/([^/]+)/);
+  const id = match?.[1]?.match(/-(\d+)$/)?.[1];
 
   const selected = projects.find(p => String(p.id) === id);
 
   if (selected) {
-    await loadProject(selected);
-  } else if (projects.length) {
-    await loadProject(projects[0]);
-  }
+  await loadProject(selected, false);
+} else if (projects.length) {
+  await loadProject(projects[0]);
 }
+}
+
 
 function addText() {
   const text = new fabric.IText("NEW TEXT", {
@@ -327,11 +353,6 @@ document.addEventListener("keydown", e => {
   else if (e.ctrlKey && e.shiftKey && key === "n") {
     const name = prompt("Project name?");
     if (name) {
-      const p = { id: crypto.randomUUID(), name, data: null };
-      projects.push(p);
-      renderProjects();
-      loadProject(p);
-      save();
     }
   }
 });
@@ -342,6 +363,19 @@ canvas.freeDrawingBrush.color = "#111111";
 if (!location.pathname.endsWith('/edit')) {
   document.body.classList.add('preview');
 }
+
+window.addEventListener("popstate", async () => {
+  const match = location.pathname.match(/\/artist\/([^/]+)/);
+  const id = match?.[1]?.match(/-(\d+)$/)?.[1];
+
+  const selected = projects.find(p => String(p.id) === id);
+
+  if (selected) {
+    await loadProject(selected, false);
+  }
+});
+
+
 
 init().catch(err => {
   document.querySelector("#status").textContent = "LOAD ERROR";
