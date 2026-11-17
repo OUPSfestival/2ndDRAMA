@@ -20,9 +20,12 @@ header {
 }
 
 .logo {
-  font-size: 19px;
-  font-weight: bold;
-  white-space: nowrap;
+    font-family: Arial, sans-serif;
+    font-size: 25px;
+    font-weight: bold;
+    letter-spacing: -1.5px;
+    color: white;
+    margin: 0;
 }
 
 .logo small {
