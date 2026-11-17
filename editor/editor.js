@@ -83,6 +83,15 @@ function save() {
 async function loadProject(p, updateURL = true) {
   current = p;
 
+  const isPreview = !location.pathname.endsWith("/edit");
+
+  document.body.classList.toggle("preview", isPreview);
+
+  document.querySelector("#preview").textContent =
+  isPreview ? "EDIT" : "PREVIEW ↗";
+
+  canvas.selection = !isPreview;
+
 
   // Update browser URL when switching projects
 if (updateURL) {
@@ -320,7 +329,17 @@ document.querySelector("#redo").onclick = () => {
 };
 
 document.querySelector("#preview").onclick = () => {
-  const preview = document.body.classList.toggle("preview");
+  const preview = !document.body.classList.contains("preview");
+
+  document.body.classList.toggle("preview", preview);
+
+  const currentPath = location.pathname.replace(/\/edit$/, "");
+
+  history.pushState(
+    { projectId: current.id },
+    "",
+    preview ? currentPath : `${currentPath}/edit`
+  );
 
   document.querySelector("#preview").textContent =
     preview ? "EDIT" : "PREVIEW ↗";
