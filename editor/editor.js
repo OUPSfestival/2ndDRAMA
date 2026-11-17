@@ -117,15 +117,17 @@ if (updateURL) {
         : "LOCATION"
     ].join("   ·   ");
 
-    canvas.getObjects().forEach(obj => {
-      if (
-        (obj.type === "i-text" || obj.type === "text") &&
-        obj.text?.trim() === "Riverrrr"
-      ) {
-        obj.set("text", eventText);
-      }
-    });
+  canvas.getObjects().forEach(obj => {
+    if (
+    (obj.type === "i-text" || obj.type === "text") &&
+    obj.text?.trim() === "PAGE 01"
+    ) {
+    obj.set("text", eventText);
+    }
+  });
 
+
+  
     canvas.renderAll();
 
     restoring = false;
