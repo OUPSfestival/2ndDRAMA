@@ -59,19 +59,22 @@ function save() {
   }, 700);
 }
 
+
+
 function formatCoordinates(lat, lng) {
-  function format(value, positive, negative) {
-    const direction = value >= 0 ? positive : negative;
-    const absolute = Math.abs(value);
-    const degrees = Math.floor(absolute);
-    const minutesFloat = (absolute - degrees) * 60;
-    const minutes = Math.floor(minutesFloat);
-    const seconds = ((minutesFloat - minutes) * 60).toFixed(1);
+    function format(value, positive, negative) {
+        const direction = value >= 0 ? positive : negative;
+        const absolute = Math.abs(value);
 
-    return `${degrees}°${String(minutes).padStart(2, "0")}'${String(seconds).padStart(4, "0")}"${direction}`;
-  }
+        const degrees = Math.floor(absolute);
+        const minutesFloat = (absolute - degrees) * 60;
+        const minutes = Math.floor(minutesFloat);
+        const seconds = ((minutesFloat - minutes) * 60).toFixed(1);
 
-  return `${format(lat, "N", "S")} ${format(lng, "E", "W")}`;
+        return `${degrees}°${String(minutes).padStart(2, "0")}'${String(seconds).padStart(4, "0")}"${direction}`;
+    }
+
+    return `${format(lat, "N", "S")} ${format(lng, "E", "W")}`;
 }
 
 
@@ -93,29 +96,48 @@ async function loadProject(p) {
     canvas.clear();
     canvas.backgroundColor = "#e8e6dd";
 
-      if (result.canvas) {
-      await canvas.loadFromJSON(result.canvas);
-      }
 
-      // Replace Riverrrr with event information
-      const eventText = [
-        p.event_date || "DATE",
-        p.event_time || "TIME",
-        p.latitude != null && p.longitude != null
-          ? formatCoordinates(p.latitude, p.longitude)
-          : "LOCATION"
-      ].join("   ·   ");
-
-      canvas.getObjects().forEach(obj => {
-        if (
-          (obj.type === "i-text" || obj.type === "text") &&
-          obj.text?.trim() === "Riverrrr"
-        ) {
-          obj.set("text", eventText);
+    
+            if (result.canvas) {
+            await canvas.loadFromJSON(result.canvas);
         }
-      });
 
-      canvas.renderAll();
+        // Replace Riverrrr with event details
+        const date = p.event_date
+            ? new Date(p.event_date + "T00:00:00").toLocaleDateString("en-GB", {
+                day: "2-digit",
+                month: "long",
+                year: "numeric"
+            }).toUpperCase()
+            : "";
+
+        const time = p.event_time
+            ? String(p.event_time).slice(0, 5)
+            : "";
+
+        const coordinates =
+            p.latitude != null && p.longitude != null
+                ? formatCoordinates(p.latitude, p.longitude)
+                : "";
+
+        const eventText = [date, time, coordinates]
+            .filter(Boolean)
+            .join("   ·   ");
+
+        canvas.getObjects().forEach(obj => {
+            if (
+                (obj.type === "i-text" || obj.type === "text") &&
+                obj.text?.trim() === "Riverrrr"
+            ) {
+                obj.set("text", eventText);
+            }
+        });
+
+        canvas.renderAll();
+
+
+
+
 
     restoring = false;
     canvas.renderAll();
