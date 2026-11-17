@@ -316,6 +316,10 @@ document.addEventListener("keydown", e => {
 canvas.freeDrawingBrush.width = 2;
 canvas.freeDrawingBrush.color = "#111111";
 
+if (!location.pathname.endsWith('/edit')) {
+  document.body.classList.add('preview');
+}
+
 init().catch(err => {
   document.querySelector("#status").textContent = "LOAD ERROR";
   console.error(err);

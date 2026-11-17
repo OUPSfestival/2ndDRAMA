@@ -182,6 +182,10 @@ body.preview .workspace {
   padding: 12px;
 }
 
+body.preview #status {
+  display: none;
+}
+
 body.preview #canvasScroll {
   background: #292929;
 }

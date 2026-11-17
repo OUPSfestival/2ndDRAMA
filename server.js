@@ -82,7 +82,8 @@ app.get('/artist/:slug', async (req, res) => {
             return res.status(404).send('Artist not found');
         }
 
-        res.sendFile(__dirname + '/artist.html');
+        res.sendFile(path.join(__dirname, 'editor', 'editor.html'));
+
 
     } catch (error) {
         console.error(error);
