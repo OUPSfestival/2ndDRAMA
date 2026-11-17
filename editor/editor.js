@@ -52,6 +52,7 @@ canvas.on("object:removed", snapshot);
 
 
 
+
 function save() {
   if (!current) return;
 
@@ -87,6 +88,7 @@ function save() {
     }
   }, 700);
 }
+
 
 
 
