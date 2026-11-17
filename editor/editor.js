@@ -218,17 +218,21 @@
 
     /* DRAWING */
 
-    function toggleDrawing() {
-        drawing = !drawing;
+   function setTool(tool) {
+    drawing = tool === 'draw';
 
-        $('draw-tool').classList.toggle('active', drawing);
+    $('select-tool').classList.toggle('active', !drawing);
+    $('draw-tool').classList.toggle('active', drawing);
 
-        stage.container().style.cursor = drawing
-            ? 'crosshair'
-            : 'default';
+    stage.container().style.cursor = drawing
+        ? 'crosshair'
+        : 'default';
 
-        select(null);
-    }
+    select(null);
+}
+
+$('select-tool').onclick = () => setTool('select');
+$('draw-tool').onclick = () => setTool('draw');
 
     function startDrawing(e) {
         if (!drawing || textEditor) return;
@@ -277,8 +281,6 @@
         updateCanvasHeight();
         save();
     }
-
-    $('draw-tool').onclick = toggleDrawing;
 
     /* TEXT EDITING */
 

@@ -32,10 +32,9 @@
         <section class="canvas-area">
 
             <div class="canvas-toolbar">
-                    <button id="add-text">Add Text</button>
+                    <button id="select-tool" class="active">Select</button>
                     <button id="draw-tool">DRAW</button>
-                    <button id="undo-button" disabled>↶ Undo</button>
-                    <button id="redo-button" disabled>↷ Redo</button>
+                    <button id="add-text">Add Text</button>
                     <button id="upload-image">Upload Image</button>
                         <input
                             type="file"
@@ -43,6 +42,8 @@
                             accept="image/*"
                             hidden
                         >
+                    <button id="undo-button" disabled>↶ Undo</button>
+                    <button id="redo-button" disabled>↷ Redo</button>
 
             <div id="text-toolbar">
                     <button id="format-bold"><b>B</b></button>

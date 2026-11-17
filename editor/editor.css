@@ -48,18 +48,6 @@ body {
     font-size: 25px;
     font-weight: bold;
     letter-spacing: -1.5px;
-
-        color: white;
-    text-decoration: none;
-    cursor: pointer;
-}
-
-.logo:hover,
-.logo:visited,
-.logo:active {
-    color: white;
-    text-decoration: none;
-
 }
 
 .artist-title,
@@ -230,6 +218,13 @@ button:disabled {
 #redo-button:disabled {
     opacity: .3;
     cursor: not-allowed;
+}
+
+#select-tool.active,
+#draw-tool.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: white;
 }
 
 
