@@ -110,24 +110,24 @@ if (updateURL) {
     }
 
     const eventText = [
-      p.event_date || "DATE",
-      p.event_time || "TIME",
-      p.latitude != null && p.longitude != null
-        ? formatCoordinates(p.latitude, p.longitude)
-        : "LOCATION"
-    ].join("   ·   ");
+  p.event_date || "DATE",
+  p.event_time || "TIME",
+  p.latitude != null && p.longitude != null
+    ? formatCoordinates(p.latitude, p.longitude)
+    : "LOCATION"
+].join("   ·   ");
 
-  canvas.getObjects().forEach(obj => {
-    if (
+canvas.getObjects().forEach(obj => {
+  if (
     (obj.type === "i-text" || obj.type === "text") &&
     obj.text?.trim() === "PAGE 01"
-    ) {
+  ) {
     obj.set("text", eventText);
-    }
-  });
+  }
+});
 
 
-  
+
     canvas.renderAll();
 
     restoring = false;
