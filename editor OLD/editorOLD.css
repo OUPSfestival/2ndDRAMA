@@ -1,0 +1,379 @@
+
+/* =========================================
+   OUPS! ARTIST EDITOR
+========================================= */
+
+:root {
+    --bg: #171715;
+    --panel: #1D1D1A;
+    --surface: #22221F;
+    --canvas: #292822;
+
+    --border: #414039;
+    --text: #EAE7DF;
+    --muted: #A09D93;
+    --accent: #B15E43;
+
+    --mono: monospace;
+}
+
+/* GLOBAL */
+
+* {
+    box-sizing: border-box;
+    border-radius: 0 !important;
+}
+
+body {
+    margin: 0;
+    overflow: hidden;
+    background: var(--bg);
+    color: var(--text);
+    font: 12px Arial, sans-serif;
+}
+
+/* TOP BAR */
+
+.topbar {
+    height: 65px;
+    padding: 0 25px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+}
+
+.logo {
+    font-size: 25px;
+    font-weight: bold;
+    letter-spacing: -1.5px;
+}
+
+.artist-title,
+.top-actions {
+    font: 10px var(--mono);
+    color: var(--muted);
+    letter-spacing: .08em;
+}
+
+.top-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* BUTTONS */
+
+button {
+    padding: 8px 12px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text);
+    font: 10px var(--mono);
+    cursor: pointer;
+}
+
+button:hover:not(:disabled) {
+    background: #32312C;
+}
+
+button:disabled {
+    opacity: .3;
+    cursor: not-allowed;
+}
+
+.topbar button {
+    background: transparent;
+}
+
+#add-text,
+#preview-button {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: white;
+}
+
+/* WORKSPACE */
+
+.workspace {
+    display: flex;
+    height: calc(100vh - 65px);
+}
+
+/* LEFT SIDEBAR */
+
+.sidebar,
+.right-sidebar {
+    flex-shrink: 0;
+    padding: 25px 18px;
+    background: var(--panel);
+}
+
+.sidebar {
+    width: 220px;
+    border-right: 1px solid var(--border);
+}
+
+.sidebar h3,
+.right-sidebar h3 {
+    margin: 0 0 25px;
+    color: var(--muted);
+    font: 10px var(--mono);
+    letter-spacing: .08em;
+    text-transform: uppercase;
+}
+
+/* PROJECTS */
+
+#event-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.event {
+    position: relative;
+    padding: 12px 35px 12px 10px;
+    border: 1px solid transparent;
+    color: var(--muted);
+    font: 11px var(--mono);
+    cursor: pointer;
+}
+
+.event:hover {
+    background: var(--surface);
+}
+
+.event.active {
+    background: #292822;
+    border-color: var(--border);
+    border-left: 2px solid var(--accent);
+    color: var(--text);
+}
+
+.event small {
+    display: block;
+    margin-top: 7px;
+    color: #706E65;
+    font: 9px var(--mono);
+}
+
+/* DELETE PROJECT */
+
+.delete-event {
+    position: absolute;
+    top: 8px;
+    right: 5px;
+    padding: 2px 7px;
+    border: 0;
+    background: transparent;
+    color: var(--muted);
+    opacity: 0;
+}
+
+.event:hover .delete-event {
+    opacity: 1;
+}
+
+.delete-event:hover {
+    color: var(--accent);
+}
+
+/* CANVAS AREA */
+
+.canvas-area {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+/* TOOLBAR */
+
+.canvas-toolbar {
+    height: 55px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 0 20px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+}
+
+#draw-tool.active {
+    background: #B15E43;
+    border-color: #B15E43;
+    color: white;
+}
+
+#undo-button,
+#redo-button {
+    min-width: 65px;
+}
+
+#undo-button:disabled,
+#redo-button:disabled {
+    opacity: .3;
+    cursor: not-allowed;
+}
+
+#select-tool.active,
+#draw-tool.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: white;
+}
+
+
+
+
+/* CANVAS */
+
+#canvas-container {
+    flex: 1;
+    min-width: 0;
+    min-height: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    position: relative;
+    background-color: var(--canvas);
+    background-image:
+        linear-gradient(rgba(255,255,255,.012) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.012) 1px, transparent 1px);
+    background-size: 24px 24px;
+}
+
+
+
+/* RIGHT SIDEBAR */
+
+.right-sidebar {
+    width: 210px;
+    border-left: 1px solid var(--border);
+}
+
+.right-sidebar p,
+.element-info {
+    color: var(--muted);
+    font: 10px/1.8 var(--mono);
+}
+
+.element-info {
+    margin-top: 25px;
+    padding-top: 15px;
+    border-top: 1px solid var(--border);
+}
+
+/* TEXT TOOLBAR */
+
+#text-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin: 10px 0;
+}
+
+#text-toolbar button[data-color] {
+    width: 21px;
+    height: 21px;
+    padding: 0;
+}
+
+/* SAVE STATUS */
+
+#save-status {
+    color: var(--muted);
+    font: 9px var(--mono);
+    text-transform: uppercase;
+}
+
+
+
+/* =========================================
+   PREVIEW MODE
+========================================= */
+
+.preview-mode .topbar {
+    height: 65px;
+}
+
+.preview-mode .sidebar,
+.preview-mode .canvas-toolbar {
+    visibility: hidden;
+}
+
+/* Keep original editor dimensions */
+
+.preview-mode .workspace {
+    height: calc(100vh - 65px);
+    display: flex;
+}
+
+.preview-mode .sidebar {
+    width: 220px;
+    flex-shrink: 0;
+}
+
+.preview-mode .canvas-area {
+    flex: 1;
+    min-width: 0;
+}
+
+/* Same canvas background, no grid */
+
+.preview-mode #canvas-container {
+    background: #20201F;
+    background-image: none;
+}
+
+/* Right comments column */
+
+.preview-mode .right-sidebar {
+    display: block;
+    width: 210px;
+    min-width: 210px;
+    flex-shrink: 0;
+    background: #171717;
+    border-left: 1px solid #454545;
+    color: #FFFFFF;
+}
+
+.preview-mode .right-sidebar h3 {
+    color: #FFFFFF;
+}
+
+.preview-mode .right-sidebar p,
+.preview-mode .element-info {
+    color: #999999;
+}
+
+/* Edit button */
+
+.preview-mode #preview-button {
+    background: transparent;
+    border: 1px solid #454545;
+    color: #FFFFFF;
+}
+
+
+/* MOBILE */
+
+@media (max-width: 700px) {
+    .sidebar,
+    .right-sidebar,
+    .artist-title {
+        display: none;
+    }
+
+    .topbar {
+        padding: 0 15px;
+    }
+
+    .canvas-toolbar {
+        overflow-x: auto;
+        padding: 0 10px;
+    }
+}

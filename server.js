@@ -5,7 +5,7 @@ require('dotenv').config();
 const path = require('path');
 const app = express();
 
-app.use(express.json());
+app.use(express.json({ limit: '12mb' }));
 app.use(express.urlencoded({ extended: true }));
 
 // Serve all files from the main project folder
@@ -53,6 +53,25 @@ async function findArtistBySlug(slug) {
 
     return artist;
 }
+
+// NEW EDITOR PAGE
+app.get('/artist/:slug/edit', async (req, res) => {
+    try {
+        const artist = await findArtistBySlug(req.params.slug);
+
+        if (!artist) {
+            return res.status(404).send('Artist not found');
+        }
+
+        res.sendFile(
+            path.join(__dirname, 'editor', 'editor.html')
+        );
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Could not open editor');
+    }
+});
 
 // PUBLIC ARTIST PAGE
 app.get('/artist/:slug', async (req, res) => {
@@ -324,8 +343,8 @@ app.delete('/api/events/:id', async (req, res) => {
 });
 
 // Start server
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
-    console.log(`OUPS! running at http://localhost:${PORT}`);
+    console.log(`OUPS! running on port ${PORT}`);
 });

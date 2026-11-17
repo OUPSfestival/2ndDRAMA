@@ -1,0 +1,88 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OUPS! Artist Editor</title>
+    <link rel="stylesheet" href="editor.css">
+</head>
+
+<body>
+
+    <header class="topbar">
+        <div class="logo">OUPS!</div>
+        <div class="artist-title" id="artist-title">ARTIST EDITOR / FISCHLI</div>
+
+        <div class="top-actions">
+            <span id="save-status">Loading...</span>
+            <button id="preview-button">Preview</button>
+        </div>
+    </header>
+
+    <main class="workspace">
+
+        <!-- LEFT SIDEBAR -->
+        <aside class="sidebar">
+            <h3>EVENTS</h3>
+            <div id="event-list"></div>
+        </aside>
+
+        <!-- CANVAS -->
+        <section class="canvas-area">
+
+            <div class="canvas-toolbar">
+                    <button id="select-tool" class="active">Select</button>
+                    <button id="draw-tool">DRAW</button>
+                    <button id="add-text">Add Text</button>
+                    <button id="upload-image">Upload Image</button>
+                        <input
+                            type="file"
+                            id="image-input"
+                            accept="image/*"
+                            hidden
+                        >
+                    <button id="undo-button" disabled>↶ Undo</button>
+                    <button id="redo-button" disabled>↷ Redo</button>
+
+            <div id="text-toolbar">
+                    <button id="format-bold"><b>B</b></button>
+                    <button id="format-underline"><u>U</u></button>
+                    <button id="format-italic"><i>I</i></button>
+
+                    <button id="font-smaller">A−</button>
+                    <button id="font-bigger">A+</button>
+
+                    <button data-color="#292929" style="background:#292929"></button>
+                    <button data-color="#A3432F" style="background:#A3432F"></button>
+                    <button data-color="#C47A43" style="background:#C47A43"></button>
+                    <button data-color="#D6A85F" style="background:#D6A85F"></button>
+                    <button data-color="#78816A" style="background:#78816A"></button>
+                    <button data-color="#A8C5D8" style="background:#A8C5D8"></button>
+                    <button data-color="#789BB5" style="background:#789BB5"></button>
+                    <button data-color="#D4E2EA" style="background:#D4E2EA"></button>
+                </div>
+
+                <button id="delete-element">Delete</button>
+            </div>
+
+            <div id="canvas-container"></div>
+
+        </section>
+
+        <!-- RIGHT SIDEBAR -->
+        <aside class="right-sidebar">
+            <h3>ELEMENTS</h3>
+            <p>Select an element on the canvas to edit it.</p>
+            <div class="element-info" id="element-info">
+                Nothing selected
+            </div>
+        </aside>
+
+    </main>
+
+    <script src="https://unpkg.com/konva@9/konva.min.js"></script>
+    <script src="editor.js"></script>
+
+</body>
+</html>

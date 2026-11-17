@@ -1,88 +1,57 @@
-
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OUPS! Artist Editor</title>
-    <link rel="stylesheet" href="editor.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>OUPS! Editor</title>
+  <link rel="stylesheet" href="editor.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
 </head>
-
 <body>
 
-    <header class="topbar">
-        <div class="logo">OUPS!</div>
-        <div class="artist-title" id="artist-title">ARTIST EDITOR / FISCHLI</div>
+<header>
+  <div class="logo">CUT / PASTE <small>V.01 / OUPS!</small></div>
 
-        <div class="top-actions">
-            <span id="save-status">Loading...</span>
-            <button id="preview-button">Preview</button>
-        </div>
-    </header>
+  <nav>
+    <button data-tool="select">↖<small>V</small></button>
+    <button data-tool="text">T<small>T</small></button>
+    <button id="image">▧<small>I</small></button>
+    <button data-tool="draw">✎<small>D</small></button>
+    <button data-tool="select">↔<small>M</small></button>
+    <button data-tool="rect">□<small>S</small></button>
+    <button id="bold">B<small>B</small></button>
+    <button id="italic">I<small>I</small></button>
+    <button id="underline">U<small>U</small></button>
+    <button id="delete">×<small>X</small></button>
+    <button id="undo">↶<small>Z</small></button>
+    <button id="redo">↷<small>Y</small></button>
 
-    <main class="workspace">
+    <input type="number" id="fontSize" value="32" min="6" max="200" title="Font size">
+    <input type="color" id="colour" value="#111111" title="Colour">
+    <button id="preview">PREVIEW ↗</button>
+  </nav>
+</header>
 
-        <!-- LEFT SIDEBAR -->
-        <aside class="sidebar">
-            <h3>EVENTS</h3>
-            <div id="event-list"></div>
-        </aside>
+<main>
+  <aside>
+    <label>PROJECTS</label>
+    <div id="projects"></div>
+  </aside>
 
-        <!-- CANVAS -->
-        <section class="canvas-area">
+  <section class="workspace">
+    <div class="page-info">
+      <span id="pageName">PAGE 01</span>
+      <span id="status">SAVED</span>
+    </div>
 
-            <div class="canvas-toolbar">
-                    <button id="select-tool" class="active">Select</button>
-                    <button id="draw-tool">DRAW</button>
-                    <button id="add-text">Add Text</button>
-                    <button id="upload-image">Upload Image</button>
-                        <input
-                            type="file"
-                            id="image-input"
-                            accept="image/*"
-                            hidden
-                        >
-                    <button id="undo-button" disabled>↶ Undo</button>
-                    <button id="redo-button" disabled>↷ Redo</button>
+    <div id="canvasScroll">
+      <canvas id="canvas"></canvas>
+    </div>
+  </section>
+</main>
 
-            <div id="text-toolbar">
-                    <button id="format-bold"><b>B</b></button>
-                    <button id="format-underline"><u>U</u></button>
-                    <button id="format-italic"><i>I</i></button>
+<input type="file" id="upload" accept="image/*" hidden>
 
-                    <button id="font-smaller">A−</button>
-                    <button id="font-bigger">A+</button>
-
-                    <button data-color="#292929" style="background:#292929"></button>
-                    <button data-color="#A3432F" style="background:#A3432F"></button>
-                    <button data-color="#C47A43" style="background:#C47A43"></button>
-                    <button data-color="#D6A85F" style="background:#D6A85F"></button>
-                    <button data-color="#78816A" style="background:#78816A"></button>
-                    <button data-color="#A8C5D8" style="background:#A8C5D8"></button>
-                    <button data-color="#789BB5" style="background:#789BB5"></button>
-                    <button data-color="#D4E2EA" style="background:#D4E2EA"></button>
-                </div>
-
-                <button id="delete-element">Delete</button>
-            </div>
-
-            <div id="canvas-container"></div>
-
-        </section>
-
-        <!-- RIGHT SIDEBAR -->
-        <aside class="right-sidebar">
-            <h3>ELEMENTS</h3>
-            <p>Select an element on the canvas to edit it.</p>
-            <div class="element-info" id="element-info">
-                Nothing selected
-            </div>
-        </aside>
-
-    </main>
-
-    <script src="https://unpkg.com/konva@9/konva.min.js"></script>
-    <script src="editor.js"></script>
-
+<script src="editor.js"></script>
 </body>
 </html>
