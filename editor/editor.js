@@ -59,6 +59,22 @@ function save() {
   }, 700);
 }
 
+function formatCoordinates(lat, lng) {
+  function format(value, positive, negative) {
+    const direction = value >= 0 ? positive : negative;
+    const absolute = Math.abs(value);
+    const degrees = Math.floor(absolute);
+    const minutesFloat = (absolute - degrees) * 60;
+    const minutes = Math.floor(minutesFloat);
+    const seconds = ((minutesFloat - minutes) * 60).toFixed(1);
+
+    return `${degrees}°${String(minutes).padStart(2, "0")}'${String(seconds).padStart(4, "0")}"${direction}`;
+  }
+
+  return `${format(lat, "N", "S")} ${format(lng, "E", "W")}`;
+}
+
+
 async function loadProject(p) {
   current = p;
   undoStack = [];
@@ -77,9 +93,29 @@ async function loadProject(p) {
     canvas.clear();
     canvas.backgroundColor = "#e8e6dd";
 
-    if (result.canvas) {
+      if (result.canvas) {
       await canvas.loadFromJSON(result.canvas);
-    }
+      }
+
+      // Replace Riverrrr with event information
+      const eventText = [
+        p.event_date || "DATE",
+        p.event_time || "TIME",
+        p.latitude != null && p.longitude != null
+          ? formatCoordinates(p.latitude, p.longitude)
+          : "LOCATION"
+      ].join("   ·   ");
+
+      canvas.getObjects().forEach(obj => {
+        if (
+          (obj.type === "i-text" || obj.type === "text") &&
+          obj.text?.trim() === "Riverrrr"
+        ) {
+          obj.set("text", eventText);
+        }
+      });
+
+      canvas.renderAll();
 
     restoring = false;
     canvas.renderAll();

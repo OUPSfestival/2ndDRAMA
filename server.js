@@ -232,6 +232,9 @@ app.get('/api/canvases', async (req, res) => {
                 e.id,
                 e.artist_name,
                 e.event_date,
+                e.event_time,
+                e.latitude,
+                e.longitude,
                 'event-' || e.id AS canvas_key
             FROM events e
             ORDER BY e.event_date, e.event_time
