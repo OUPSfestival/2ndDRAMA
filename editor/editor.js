@@ -59,6 +59,9 @@ function save() {
   }, 700);
 }
 
+
+
+
 async function loadProject(p) {
   current = p;
   undoStack = [];
@@ -77,9 +80,29 @@ async function loadProject(p) {
     canvas.clear();
     canvas.backgroundColor = "#e8e6dd";
 
-    if (result.canvas) {
+      if (result.canvas) {
       await canvas.loadFromJSON(result.canvas);
-    }
+      }
+
+      // Replace Riverrrr with event information
+      const eventText = [
+        p.event_date || "DATE",
+        p.event_time || "TIME",
+        p.latitude != null && p.longitude != null
+          ? formatCoordinates(p.latitude, p.longitude)
+          : "LOCATION"
+      ].join("   ·   ");
+
+      canvas.getObjects().forEach(obj => {
+        if (
+          (obj.type === "i-text" || obj.type === "text") &&
+          obj.text?.trim() === "Riverrrr"
+        ) {
+          obj.set("text", eventText);
+        }
+      });
+
+      canvas.renderAll();
 
     restoring = false;
     canvas.renderAll();
@@ -272,7 +295,7 @@ document.querySelector("#preview").onclick = () => {
   const preview = document.body.classList.toggle("preview");
 
   document.querySelector("#preview").textContent =
-    preview ? "EDIT" : "PREVIEW";
+    preview ? "EDIT" : "PREVIEW ↗";
 
   canvas.selection = !preview;
 
@@ -315,6 +338,10 @@ document.addEventListener("keydown", e => {
 
 canvas.freeDrawingBrush.width = 2;
 canvas.freeDrawingBrush.color = "#111111";
+
+if (!location.pathname.endsWith('/edit')) {
+  document.body.classList.add('preview');
+}
 
 init().catch(err => {
   document.querySelector("#status").textContent = "LOAD ERROR";
