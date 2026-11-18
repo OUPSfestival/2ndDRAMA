@@ -1,23 +1,21 @@
 const artistId = location.pathname.match(/\/artist\/([^/]+)/)?.[1];
 const API = "/api";
 
-function updateProjectURL(p) {
-  const slug = String(p.artist_name)
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .toLowerCase()
-    .trim()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-|-$/g, "");
+function updateProjectURL(p, edit = false) {
+    const slug = String(p.artist_name)
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLowerCase()
+        .trim()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-|-$/g, "");
 
-  const newURL = `/artist/${slug}-${p.id}/edit`;
+    const newURL = `/artist/${slug}-${p.id}${edit ? "/edit" : ""}`;
 
-  history.pushState(
-    { projectId: p.id },
-    "",
-    newURL
-  );
+    history.pushState({ projectId: p.id }, "", newURL);
 }
+
+
 
 const scroll = document.querySelector("#canvasScroll");
 const canvas = new fabric.Canvas("canvas", {
@@ -399,31 +397,29 @@ document.querySelector("#redo").onclick = () => {
 };
 
 document.querySelector("#preview").onclick = () => {
-  const preview = !document.body.classList.contains("preview");
+    const isPreview = document.body.classList.contains("preview");
 
-  document.body.classList.toggle("preview", preview);
+    const preview = !isPreview;
 
-  const currentPath = location.pathname.replace(/\/edit$/, "");
+    document.body.classList.toggle("preview", preview);
 
-  history.pushState(
-    { projectId: current.id },
-    "",
-    preview ? currentPath : `${currentPath}/edit`
-  );
+    updateProjectURL(current, !preview);
 
-  document.querySelector("#preview").textContent =
-    preview ? "EDIT" : "PREVIEW ↗";
+    document.querySelector("#preview").textContent =
+        preview ? "EDIT" : "PREVIEW ↗";
 
-  canvas.selection = !preview;
+    canvas.selection = !preview;
 
-  canvas.forEachObject(o => {
-    o.selectable = !preview;
-    o.evented = !preview;
-  });
+    canvas.forEachObject(o => {
+        o.selectable = !preview;
+        o.evented = !preview;
+    });
 
-  canvas.discardActiveObject();
-  canvas.renderAll();
+    canvas.discardActiveObject();
+    canvas.renderAll();
 };
+
+
 
 document.addEventListener("keydown", e => {
   if (e.target.matches("input,textarea") || e.target.isContentEditable) return;
