@@ -114,9 +114,19 @@ function save() {
 async function loadProject(p, updateURL = true) {
   current = p;
 
-  const isPreview = !location.pathname.endsWith("/edit");
+const isPreview = !location.pathname.endsWith("/edit");
 
-  document.body.classList.toggle("preview", isPreview);
+document.body.classList.toggle("preview", isPreview);
+
+document.querySelector("#toolbar").style.display =
+    isPreview ? "none" : "flex";
+
+canvas.selection = !isPreview;
+
+canvas.forEachObject(obj => {
+    obj.selectable = !isPreview;
+    obj.evented = !isPreview;
+});
 
   document.querySelector("#preview").textContent =
   isPreview ? "EDIT" : "PREVIEW ↗";
@@ -124,9 +134,9 @@ async function loadProject(p, updateURL = true) {
  
 
   // Update browser URL when switching projects
-if (updateURL) {
-  updateProjectURL(p);
-}
+    if (updateURL) {
+    updateProjectURL(p);
+  }
 
   undoStack = [];
   redoStack = [];
