@@ -223,19 +223,7 @@ body.preview #canvasScroll {
 
 
 
-body.preview [data-tool],
-body.preview #image,
-body.preview #delete,
-body.preview #colour,
-body.preview #fontSize,
-body.preview #bold,
-body.preview #italic,
-body.preview #underline,
-body.preview #undo,
-body.preview #redo {
-    display: none !important;
-}
-body.preview #delete,
+body.preview #toolbar,
 body.preview .delete-project {
     display: none !important;
 }

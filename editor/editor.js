@@ -111,7 +111,9 @@ function save() {
 }
 
 
-
+function formatCoordinates(latitude, longitude) {
+    return `${latitude}, ${longitude}`;
+}
 
 
 async function loadProject(p, updateURL = true) {
