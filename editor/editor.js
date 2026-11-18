@@ -1,5 +1,4 @@
-const artistId = location.pathname.match(/\/artist\/([^/]+)/)?.[1];
-const API = "/api";
+const API = "https://oups-our-drama-2nd-edition.onrender.com/api";
 
 
 function updateProjectURL(p, edit = location.pathname.endsWith("/edit")) {
@@ -11,6 +10,7 @@ function updateProjectURL(p, edit = location.pathname.endsWith("/edit")) {
         `/2ndDRAMA/project/${slug}${edit ? "/edit" : ""}`
     );
 }
+
 function createArtistSlug(p) {
     const name = String(p.artist_name)
         .normalize("NFD")
@@ -122,7 +122,7 @@ if (updateURL) {
   document.querySelector("#status").textContent = "LOADING...";
 
   try {
-    const response = await fetch(`/api/canvas/${p.canvas_key}`);
+    const response = await fetch(`${API}/canvas/${p.canvas_key}`);
 
     if (!response.ok) throw new Error("Could not load canvas");
 
@@ -262,7 +262,7 @@ function renderProjects() {
 
 
 async function init() {
-  const response = await fetch("/api/canvases");
+  const response = await fetch($/canvases);
 
   if (!response.ok) throw new Error("Could not load projects");
 
