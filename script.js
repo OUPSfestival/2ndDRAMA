@@ -96,7 +96,9 @@ function createArtistSlug(event) {
 async function loadEvents() {
 
     try {
-        const response = await fetch('/api/events');
+        const response = await fetch(
+        'https://oups-our-drama-2nd-edition.onrender.com/api/events'
+        );
 
         if (!response.ok) {
             throw new Error('Could not load events');
