@@ -101,8 +101,12 @@ async function loadProject(p, updateURL = true) {
   document.querySelector("#preview").textContent =
   isPreview ? "EDIT" : "PREVIEW ↗";
 
-  canvas.selection = !isPreview;
+      canvas.selection = !isPreview;
 
+      canvas.forEachObject(obj => {
+          obj.selectable = !isPreview;
+          obj.evented = !isPreview;
+      }); 
 
   // Update browser URL when switching projects
 if (updateURL) {

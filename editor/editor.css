@@ -220,3 +220,18 @@ body.preview #status {
 body.preview #canvasScroll {
   background: #292929;
 }
+
+
+
+body.preview [data-tool],
+body.preview #image,
+body.preview #delete,
+body.preview #colour,
+body.preview #fontSize,
+body.preview #bold,
+body.preview #italic,
+body.preview #underline,
+body.preview #undo,
+body.preview #redo {
+    display: none !important;
+}
