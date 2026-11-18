@@ -1,0 +1,25 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <script>
+        const base = location.hostname === "oupsfestival.github.io"
+            ? "/2ndDRAMA"
+            : "";
+
+        const path = location.pathname;
+
+        if (path.includes("/project/")) {
+            const route = path.replace(base, "");
+
+            sessionStorage.setItem("projectRoute", route);
+
+            location.replace(base + "/editor/editor.html");
+        }
+    </script>
+</head>
+<body>
+    Page not found.
+</body>
+</html>

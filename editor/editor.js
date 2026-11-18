@@ -1,13 +1,25 @@
+const BASE_PATH = location.hostname === "oupsfestival.github.io"
+    ? "/2ndDRAMA"
+    : "";
+
+const requestedRoute = sessionStorage.getItem("projectRoute");
+
+if (requestedRoute) {
+    history.replaceState({}, "", BASE_PATH + requestedRoute);
+    sessionStorage.removeItem("projectRoute");
+}
+
+
 const API = "https://oups-our-drama-2nd-edition.onrender.com/api";
 
 
-function updateProjectURL(p, edit = location.pathname.endsWith("/edit")) {
+function updateProjectURL(p, edit = !document.body.classList.contains("preview")) {
     const slug = createArtistSlug(p);
 
     history.pushState(
         { projectId: p.id },
         "",
-        `/2ndDRAMA/project/${slug}${edit ? "/edit" : ""}`
+        `${BASE_PATH}/project/${slug}${edit ? "/edit" : ""}`
     );
 }
 
@@ -262,24 +274,28 @@ function renderProjects() {
 
 
 async function init() {
-  const response = await fetch($/canvases);
+    const response = await fetch(`${API}/canvases`);
 
-  if (!response.ok) throw new Error("Could not load projects");
+    if (!response.ok) {
+        throw new Error("Could not load projects");
+    }
 
-  projects = await response.json();
+    projects = await response.json();
 
-  renderProjects();
+    renderProjects();
 
-const match = location.pathname.match(/\/project\/([^/]+)/);
-  const id = match?.[1]?.match(/-(\d+)$/)?.[1];
+    const match = location.pathname.match(/\/project\/([^/]+)/);
+    const slug = match?.[1];
 
-  const selected = projects.find(p => String(p.id) === id);
+    const id = slug?.match(/-(\d+)$/)?.[1];
 
-  if (selected) {
-  await loadProject(selected, false);
-} else if (projects.length) {
-  await loadProject(projects[0]);
-}
+    const selected = projects.find(p => String(p.id) === id);
+
+    if (selected) {
+        await loadProject(selected, false);
+    } else if (projects.length) {
+        await loadProject(projects[0]);
+    }
 }
 
 
@@ -468,14 +484,29 @@ if (!location.pathname.endsWith('/edit')) {
 }
 
 window.addEventListener("popstate", async () => {
-const match = location.pathname.match(/\/project\/([^/]+)/);
-  const id = match?.[1]?.match(/-(\d+)$/)?.[1];
+    const match = location.pathname.match(/\/project\/([^/]+)/);
+    const slug = match?.[1];
+    const id = slug?.match(/-(\d+)$/)?.[1];
 
-  const selected = projects.find(p => String(p.id) === id);
+    const selected = projects.find(p => String(p.id) === id);
 
-  if (selected) {
-    await loadProject(selected, false);
-  }
+    if (selected) {
+        await loadProject(selected, false);
+    }
+
+    const isPreview = !location.pathname.endsWith("/edit");
+
+    document.body.classList.toggle("preview", isPreview);
+
+    canvas.selection = !isPreview;
+
+    canvas.forEachObject(obj => {
+        obj.selectable = !isPreview;
+        obj.evented = !isPreview;
+    });
+
+    canvas.discardActiveObject();
+    canvas.renderAll();
 });
 
 
