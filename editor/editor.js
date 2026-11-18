@@ -127,7 +127,8 @@ async function loadProject(p, updateURL = true) {
     document.querySelector("#preview").textContent =
         isPreview ? "EDIT" : "PREVIEW ↗";
 
-    canvas.selection = !isPreview;
+    canvas.selection = false;
+canvas.skipTargetFind = isPreview;
 
     canvas.isDrawingMode = false;
 
