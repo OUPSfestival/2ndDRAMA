@@ -1,11 +1,20 @@
 const express = require('express');
+const cors = require('cors');
 const { neon } = require('@neondatabase/serverless');
 require('dotenv').config();
 
 const path = require('path');
 const app = express();
 
+// Allow GitHub Pages to access the API
+app.use(cors({
+    origin: 'https://oupsfestival.github.io',
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    credentials: true
+}));
+
 app.use(express.json({ limit: '12mb' }));
+
 app.use(express.urlencoded({ extended: true }));
 
 // Serve all files from the main project folder
