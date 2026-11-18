@@ -59,7 +59,7 @@ marker.bindPopup(`
             <strong>Artist</strong>
             <span>${escapeHTML(event.artist_name)}</span>
         </div>
-            <button onclick="window.location.href='/project/${artistSlug}'">
+            <button onclick="window.location.href='/2ndDRAMA/project/${artistSlug}'">
             Open artist page
             </button>
     </div>
