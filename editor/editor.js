@@ -157,12 +157,18 @@ canvas.skipTargetFind = isPreview;
     if (result.canvas) {
       await canvas.loadFromJSON(result.canvas);
     }
-          canvas.selection = !isPreview;
+      canvas.selection = false;
+canvas.skipTargetFind = isPreview;
 
-      canvas.forEachObject(obj => {
-          obj.selectable = !isPreview;
-          obj.evented = !isPreview;
-      });
+canvas.forEachObject(obj => {
+    obj.selectable = !isPreview;
+    obj.evented = !isPreview;
+    obj.lockMovementX = isPreview;
+    obj.lockMovementY = isPreview;
+    obj.lockRotation = isPreview;
+    obj.lockScalingX = isPreview;
+    obj.lockScalingY = isPreview;
+});
 
     const eventText = [
   p.event_date || "DATE",
@@ -521,12 +527,18 @@ window.addEventListener("popstate", async () => {
 
     document.body.classList.toggle("preview", isPreview);
 
-    canvas.selection = !isPreview;
+   canvas.selection = false;
+canvas.skipTargetFind = isPreview;
 
-    canvas.forEachObject(obj => {
-        obj.selectable = !isPreview;
-        obj.evented = !isPreview;
-    });
+canvas.forEachObject(obj => {
+    obj.selectable = !isPreview;
+    obj.evented = !isPreview;
+    obj.lockMovementX = isPreview;
+    obj.lockMovementY = isPreview;
+    obj.lockRotation = isPreview;
+    obj.lockScalingX = isPreview;
+    obj.lockScalingY = isPreview;
+});
 
     canvas.discardActiveObject();
     canvas.renderAll();
