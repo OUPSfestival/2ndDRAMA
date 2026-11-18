@@ -2,13 +2,13 @@ const artistId = location.pathname.match(/\/artist\/([^/]+)/)?.[1];
 const API = "/api";
 
 
-function updateProjectURL(p, edit = false) {
+function updateProjectURL(p, edit = location.pathname.endsWith("/edit")) {
     const slug = createArtistSlug(p);
 
     history.pushState(
         { projectId: p.id },
         "",
-        `/project/${slug}${edit ? "/edit" : ""}`
+        `/2ndDRAMA/project/${slug}${edit ? "/edit" : ""}`
     );
 }
 function createArtistSlug(p) {
@@ -270,7 +270,7 @@ async function init() {
 
   renderProjects();
 
-  const match = location.pathname.match(/\/artist\/([^/]+)/);
+const match = location.pathname.match(/\/project\/([^/]+)/);
   const id = match?.[1]?.match(/-(\d+)$/)?.[1];
 
   const selected = projects.find(p => String(p.id) === id);
@@ -468,7 +468,7 @@ if (!location.pathname.endsWith('/edit')) {
 }
 
 window.addEventListener("popstate", async () => {
-  const match = location.pathname.match(/\/artist\/([^/]+)/);
+const match = location.pathname.match(/\/project\/([^/]+)/);
   const id = match?.[1]?.match(/-(\d+)$/)?.[1];
 
   const selected = projects.find(p => String(p.id) === id);
