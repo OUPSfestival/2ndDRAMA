@@ -201,8 +201,7 @@ canvas.getObjects().forEach(obj => {
     undoStack = [JSON.stringify(canvas.toJSON())];
     redoStack = [];
 
-    document.querySelector("#pageName").textContent = p.artist_name;
-
+    document.querySelector("#pageName").textContent = eventText;
     document.querySelectorAll(".project").forEach(el =>
       el.classList.toggle("active", el.dataset.id === String(p.id))
     );
