@@ -56,7 +56,9 @@ let undoStack = [], redoStack = [];
 let restoring = false, saveTimer;
 
 function snapshot() {
-  if (restoring) return;
+  if (restoring || document.body.classList.contains("preview")) return;
+  if (!current) return;
+
   undoStack.push(JSON.stringify(canvas.toJSON()));
   if (undoStack.length > 50) undoStack.shift();
   redoStack = [];
@@ -468,6 +470,12 @@ document.querySelector("#preview").onclick = () => {
 
 
 document.addEventListener("keydown", e => {
+
+ if (document.body.classList.contains("preview")) {
+    e.preventDefault();
+    return;
+  }
+
   if (e.target.matches("input,textarea") || e.target.isContentEditable) return;
 
   const key = e.key.toLowerCase();
