@@ -1,8 +1,18 @@
 const artistId = location.pathname.match(/\/artist\/([^/]+)/)?.[1];
 const API = "/api";
 
+
 function updateProjectURL(p, edit = false) {
-    const slug = String(p.artist_name)
+    const slug = createArtistSlug(p);
+
+    history.pushState(
+        { projectId: p.id },
+        "",
+        `/project/${slug}${edit ? "/edit" : ""}`
+    );
+}
+function createArtistSlug(p) {
+    const name = String(p.artist_name)
         .normalize("NFD")
         .replace(/[\u0300-\u036f]/g, "")
         .toLowerCase()
@@ -10,9 +20,7 @@ function updateProjectURL(p, edit = false) {
         .replace(/[^a-z0-9]+/g, "-")
         .replace(/^-|-$/g, "");
 
-    const newURL = `/artist/${slug}-${p.id}${edit ? "/edit" : ""}`;
-
-    history.pushState({ projectId: p.id }, "", newURL);
+    return `${name}-${p.id}`;
 }
 
 
