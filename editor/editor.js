@@ -83,7 +83,8 @@ function save() {
 
   saveTimer = setTimeout(async () => {
     try {
-      const response = await fetch(`/api/canvas/${projectKey}`, {
+      const response = await fetch(`${API}/canvas/${projectKey}`, {
+
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -112,36 +113,32 @@ function save() {
 
 
 async function loadProject(p, updateURL = true) {
-  current = p;
+    current = p;
 
-const isPreview = !location.pathname.endsWith("/edit");
+    const isPreview = !location.pathname.endsWith("/edit");
 
-document.body.classList.toggle("preview", isPreview);
+    document.body.classList.toggle("preview", isPreview);
 
-document.querySelector("#toolbar").style.display =
-    isPreview ? "none" : "flex";
+    document.querySelector("#toolbar").style.display =
+        isPreview ? "none" : "flex";
 
-canvas.selection = !isPreview;
+    document.querySelector("#preview").textContent =
+        isPreview ? "EDIT" : "PREVIEW ↗";
 
-canvas.forEachObject(obj => {
-    obj.selectable = !isPreview;
-    obj.evented = !isPreview;
-});
+    canvas.selection = !isPreview;
 
-  document.querySelector("#preview").textContent =
-  isPreview ? "EDIT" : "PREVIEW ↗";
+    canvas.isDrawingMode = false;
 
- 
+    canvas.discardActiveObject();
 
-  // Update browser URL when switching projects
     if (updateURL) {
-    updateProjectURL(p);
-  }
+        updateProjectURL(p, !isPreview);
+    }
 
-  undoStack = [];
-  redoStack = [];
+    undoStack = [];
+    redoStack = [];
 
-  document.querySelector("#status").textContent = "LOADING...";
+    document.querySelector("#status").textContent = "LOADING...";
 
   try {
     const response = await fetch(`${API}/canvas/${p.canvas_key}`);
@@ -439,22 +436,29 @@ document.querySelector("#redo").onclick = () => {
 };
 
 document.querySelector("#preview").onclick = () => {
+    if (!current) return;
+
     const isPreview = document.body.classList.contains("preview");
 
-    const preview = !isPreview;
+    const newPreview = !isPreview;
 
-    document.body.classList.toggle("preview", preview);
+    document.body.classList.toggle("preview", newPreview);
 
-    updateProjectURL(current, !preview);
+    updateProjectURL(current, !newPreview);
+
+    document.querySelector("#toolbar").style.display =
+        newPreview ? "none" : "flex";
 
     document.querySelector("#preview").textContent =
-        preview ? "EDIT" : "PREVIEW ↗";
+        newPreview ? "EDIT" : "PREVIEW ↗";
 
-    canvas.selection = !preview;
+    canvas.selection = !newPreview;
 
-    canvas.forEachObject(o => {
-        o.selectable = !preview;
-        o.evented = !preview;
+    canvas.isDrawingMode = false;
+
+    canvas.forEachObject(obj => {
+        obj.selectable = !newPreview;
+        obj.evented = !newPreview;
     });
 
     canvas.discardActiveObject();
