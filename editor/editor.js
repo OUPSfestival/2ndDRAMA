@@ -101,12 +101,7 @@ async function loadProject(p, updateURL = true) {
   document.querySelector("#preview").textContent =
   isPreview ? "EDIT" : "PREVIEW ↗";
 
-      canvas.selection = !isPreview;
-
-      canvas.forEachObject(obj => {
-          obj.selectable = !isPreview;
-          obj.evented = !isPreview;
-      }); 
+ 
 
   // Update browser URL when switching projects
 if (updateURL) {
@@ -132,6 +127,12 @@ if (updateURL) {
     if (result.canvas) {
       await canvas.loadFromJSON(result.canvas);
     }
+          canvas.selection = !isPreview;
+
+      canvas.forEachObject(obj => {
+          obj.selectable = !isPreview;
+          obj.evented = !isPreview;
+      });
 
     const eventText = [
   p.event_date || "DATE",
@@ -142,12 +143,15 @@ if (updateURL) {
 ].join("   ·   ");
 
 canvas.getObjects().forEach(obj => {
-  if (
-    (obj.type === "i-text" || obj.type === "text") &&
-    obj.text?.trim() === "PAGE 01"
-  ) {
-    obj.set("text", eventText);
-  }
+    if (
+        (obj.type === "i-text" || obj.type === "text") &&
+        obj.text?.trim() === "PAGE 01"
+    ) {
+        obj.set({
+            text: eventText,
+            fontSize: obj.fontSize
+        });
+    }
 });
 
 
