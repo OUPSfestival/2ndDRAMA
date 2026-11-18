@@ -235,3 +235,7 @@ body.preview #undo,
 body.preview #redo {
     display: none !important;
 }
+body.preview #delete,
+body.preview .delete-project {
+    display: none !important;
+}
