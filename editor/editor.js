@@ -173,7 +173,14 @@ canvas.forEachObject(obj => {
 });
 
     const eventText = [
-  p.event_date || "DATE",
+  p.event_date
+    ? new Date(p.event_date).toLocaleDateString("en-GB", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+        timeZone: "UTC"
+      })
+    : "DATE",
   p.event_time || "TIME",
   p.latitude != null && p.longitude != null
     ? formatCoordinates(p.latitude, p.longitude)
