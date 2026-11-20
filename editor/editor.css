@@ -43,8 +43,8 @@ nav {
 }
 
 #toolbar button svg {
-    width: 11px;
-    height: 11px;
+    width: 15px;
+    height: 15px;
     fill: none;
     stroke: currentColor;
     stroke-width: 1.8;
@@ -104,8 +104,6 @@ input {
     height: 36px;
     background: transparent;
     color: inherit;
-    border: 1px solid #777;
-    border-radius: 6px;
     text-align: center;
     font-size: 14px;
 }
@@ -125,12 +123,13 @@ input {
     width: 34px;
     height: 36px;
     border-radius: 5px;
+    color: rgb(128, 128, 128);
 }
 
 /* SELECTED TOOL */
 #toolbar button.active {
     background: #444;
-    color: white;
+    color: rgb(213, 187, 22);
     border-radius: 6px;
 }
 
