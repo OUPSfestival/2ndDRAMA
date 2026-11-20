@@ -12,7 +12,8 @@ body {
     margin: 0;
     background: #111;
     color: #eee;
-    font: 12px monospace;
+    font-family: Arial, sans-serif;
+    letter-spacing: -0.5px;
     overflow: hidden;
 }
 
@@ -51,12 +52,16 @@ button {
     background: none;
     border: 0;
     cursor: pointer;
-    font: bold 11px monospace;
+    font-family: Arial, sans-serif;
+    letter-spacing: -0.5px;
 }
 
 #toolbar button {
     padding: 8px 5px;
     border-radius: 4px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: -0.5px;
 }
 
 #toolbar button:hover,
@@ -78,7 +83,8 @@ button {
     border: 1px solid #777;
     border-radius: 4px;
     text-align: center;
-    font: 12px monospace;
+    font-family: Arial, sans-serif;
+    letter-spacing: -0.5px;
 }
 
 #colour {
