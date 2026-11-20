@@ -457,6 +457,12 @@ document.querySelector("#preview").onclick = () => {
 
     const isPreview = document.body.classList.contains("preview");
 
+    // Require password when entering EDIT mode
+    if (isPreview && !editorUnlocked) {
+        document.querySelector("#passwordScreen").style.display = "flex";
+        return;
+    }
+
     const newPreview = !isPreview;
 
     document.body.classList.toggle("preview", newPreview);
@@ -470,7 +476,6 @@ document.querySelector("#preview").onclick = () => {
         newPreview ? "EDIT" : "PREVIEW ↗";
 
     canvas.selection = !newPreview;
-
     canvas.isDrawingMode = false;
 
     canvas.forEachObject(obj => {
