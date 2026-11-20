@@ -332,9 +332,8 @@ document.querySelector("#delete").onclick = () => {
   if (obj) canvas.remove(obj);
 };
 
-
 document.querySelector("#colourButton").onclick = () => {
-    document.querySelector("#colour").click();
+    document.querySelector("#colour").showPicker();
 };
 
 document.querySelector("#colour").oninput = e => {
@@ -350,6 +349,39 @@ document.querySelector("#colour").oninput = e => {
   canvas.renderAll();
   snapshot();
 };
+
+// FONT SIZE DROPDOWN
+const sizeInput = document.querySelector("#fontSize");
+const sizeOptions = document.querySelector("#fontSizeOptions");
+
+sizeInput.onclick = () => {
+    sizeOptions.style.display = "block";
+};
+
+sizeOptions.querySelectorAll("div").forEach(option => {
+    option.onclick = () => {
+        sizeInput.value = option.textContent;
+        sizeInput.dispatchEvent(new Event("change"));
+        sizeOptions.style.display = "none";
+    };
+});
+
+document.addEventListener("click", e => {
+    if (!e.target.closest(".font-picker")) {
+        sizeOptions.style.display = "none";
+    }
+});
+
+// EXISTING FONT SIZE FUNCTION
+document.querySelector("#fontSize").onchange = e => {
+    const obj = canvas.getActiveObject();
+    if (obj?.type === "i-text") {
+        obj.set("fontSize", +e.target.value);
+        canvas.renderAll();
+        snapshot();
+    }
+};
+
 
 document.querySelector("#fontSize").onchange = e => {
   const obj = canvas.getActiveObject();
