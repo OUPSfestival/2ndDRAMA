@@ -58,10 +58,7 @@
 
 <input type="file" id="upload" accept="image/*" hidden>
 
-<script src="editor.js"></script>
-
-
-<div id="passwordScreen">
+<div id="passwordScreen" style="display:none;">
   <div class="passwordBox">
     <h2>OUPS! EDITOR</h2>
     <p>Enter password to continue</p>
@@ -75,6 +72,14 @@
     <div id="passwordError"></div>
   </div>
 </div>
+
+<script>
+if (window.location.pathname.endsWith("/edit")) {
+  document.getElementById("passwordScreen").style.display = "flex";
+}
+</script>
+
+<script src="editor.js"></script>
 
 </body>
 

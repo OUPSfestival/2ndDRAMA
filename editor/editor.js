@@ -560,24 +560,37 @@ init().catch(err => {
 });
 
 
-// PASSWORD PROTECTION — EDITOR ONLY
-const passwordForm = document.getElementById("passwordForm");
+// OUPS EDITOR PASSWORD
+(function () {
 
-if (passwordForm) {
+  if (!window.location.pathname.endsWith("/edit")) {
+    return;
+  }
+
+  const passwordForm = document.getElementById("passwordForm");
+  const passwordScreen = document.getElementById("passwordScreen");
+
+  if (!passwordForm || !passwordScreen) {
+    console.error("Password screen not found!");
+    return;
+  }
 
   const EDITOR_PASSWORD = "OU";
 
-  passwordForm.addEventListener("submit", function(e) {
+  passwordForm.addEventListener("submit", function (e) {
     e.preventDefault();
 
-    const password = document.getElementById("editorPassword").value;
+    const enteredPassword =
+      document.getElementById("editorPassword").value;
 
-    if (password === EDITOR_PASSWORD) {
-      document.getElementById("passwordScreen").style.display = "none";
+    if (enteredPassword === EDITOR_PASSWORD) {
+      passwordScreen.style.display = "none";
     } else {
-      document.getElementById("passwordError").textContent = "Wrong password!";
+      document.getElementById("passwordError").textContent =
+        "Wrong password!";
+
       document.getElementById("editorPassword").value = "";
     }
   });
 
-}
+})();
