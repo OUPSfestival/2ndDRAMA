@@ -1,0 +1,233 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OUPS Admin</title>
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+    max-width: 750px;
+    margin: auto;
+}
+
+input {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 9px;
+    margin: 5px 0 12px;
+}
+
+button {
+    padding: 9px 15px;
+    margin: 5px 5px 5px 0;
+    cursor: pointer;
+}
+
+.project {
+    border: 1px solid #ccc;
+    padding: 15px;
+    margin: 15px 0;
+}
+
+.delete {
+    color: red;
+}
+
+#admin {
+    display: none;
+}
+
+#login {
+    max-width: 300px;
+    margin: 100px auto;
+}
+
+</style>
+</head>
+
+<body>
+
+<div id="login">
+    <h2>OUPS! ADMIN</h2>
+    <form id="loginForm">
+        <input type="password" id="password" placeholder="Admin password" required>
+        <button type="submit">ENTER</button>
+    </form>
+    <p id="loginError"></p>
+</div>
+
+<div id="admin">
+    <h2>OUPS! PROJECT ADMIN</h2>
+    <p>Manage festival projects</p>
+    <div id="projects">Loading projects...</div>
+</div>
+
+<script>
+
+const API = "https://oups-our-drama-2nd-edition.onrender.com/api";
+const ADMIN_PASSWORD = "ououou";
+
+// PASSWORD
+document.getElementById("loginForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    if (document.getElementById("password").value === ADMIN_PASSWORD) {
+        document.getElementById("login").style.display = "none";
+        document.getElementById("admin").style.display = "block";
+        loadProjects();
+    } else {
+        document.getElementById("loginError").textContent = "Wrong password!";
+    }
+});
+
+// ESCAPE TEXT BEFORE DISPLAYING IT
+function escapeHTML(value) {
+    return String(value ?? "").replace(/[&<>"']/g, char => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+    })[char]);
+}
+
+// LOAD PROJECTS
+async function loadProjects() {
+    const container = document.getElementById("projects");
+    container.textContent = "Loading...";
+
+    try {
+        const response = await fetch(`${API}/events`);
+
+        if (!response.ok) throw new Error("Could not load projects");
+
+        const projects = await response.json();
+
+        container.innerHTML = "";
+
+        if (!projects.length) {
+            container.textContent = "No projects found.";
+            return;
+        }
+
+        projects.forEach(p => {
+            const card = document.createElement("div");
+            card.className = "project";
+            card.dataset.id = p.id;
+
+            card.innerHTML = `
+                <h3>${escapeHTML(p.artist_name)} (ID: ${p.id})</h3>
+
+                <label>Project / artist name</label>
+                <input class="name" value="${escapeHTML(p.artist_name)}" required>
+
+                <label>Date</label>
+                <input class="date" type="date" value="${escapeHTML(p.event_date)}" required>
+
+                <label>Time</label>
+                <input class="time" type="time" value="${escapeHTML(String(p.event_time || "").slice(0,5))}" required>
+
+                <label>Latitude</label>
+                <input class="latitude" type="number" step="any" value="${escapeHTML(p.latitude)}" required>
+
+                <label>Longitude</label>
+                <input class="longitude" type="number" step="any" value="${escapeHTML(p.longitude)}" required>
+
+                <button class="save">SAVE CHANGES</button>
+                <button class="delete">DELETE PROJECT</button>
+                <span class="status"></span>
+            `;
+
+            container.appendChild(card);
+        });
+
+    } catch (error) {
+        container.textContent = "ERROR: " + error.message;
+    }
+}
+
+// SAVE PROJECT
+document.getElementById("projects").addEventListener("click", async function(e) {
+    const card = e.target.closest(".project");
+    if (!card) return;
+
+    const id = card.dataset.id;
+    const status = card.querySelector(".status");
+
+    if (e.target.classList.contains("save")) {
+        const data = {
+            artist_name: card.querySelector(".name").value.trim(),
+            event_date: card.querySelector(".date").value,
+            event_time: card.querySelector(".time").value,
+            latitude: Number(card.querySelector(".latitude").value),
+            longitude: Number(card.querySelector(".longitude").value)
+        };
+
+        if (
+            !data.artist_name ||
+            !data.event_date ||
+            !data.event_time ||
+            card.querySelector(".latitude").value.trim() === "" ||
+            card.querySelector(".longitude").value.trim() === "" ||
+            !Number.isFinite(data.latitude) ||
+            !Number.isFinite(data.longitude)
+        ) {
+            status.textContent = " Please fill in all fields.";
+            return;
+        }
+
+        status.textContent = " Saving...";
+
+        try {
+            const response = await fetch(`${API}/events/${id}`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(data)
+            });
+
+            if (!response.ok) {
+                const result = await response.json();
+                throw new Error(result.error || "Save failed");
+            }
+
+            status.textContent = " SAVED!";
+            card.querySelector("h3").textContent =
+                data.artist_name + " (ID: " + id + ")";
+
+        } catch (error) {
+            status.textContent = " ERROR: " + error.message;
+        }
+    }
+
+    // DELETE PROJECT
+    if (e.target.classList.contains("delete")) {
+        if (!confirm("Are you sure you want to permanently delete this project and its canvas?")) {
+            return;
+        }
+
+        status.textContent = " Deleting...";
+
+        try {
+            const response = await fetch(`${API}/events/${id}`, {
+                method: "DELETE"
+            });
+
+            if (!response.ok) throw new Error("Delete failed");
+
+            card.remove();
+
+        } catch (error) {
+            status.textContent = " ERROR: " + error.message;
+        }
+    }
+});
+
+</script>
+
+</body>
+</html>

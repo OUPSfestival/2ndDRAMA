@@ -237,58 +237,7 @@ function renderProjects() {
 
     el.onclick = () => loadProject(p);
 
-    const deleteBtn = document.createElement("button");
-    deleteBtn.className = "delete-project";
-    deleteBtn.textContent = "DELETE";
-
-    deleteBtn.onclick = async (e) => {
-      e.stopPropagation();
-
-      const confirmed = confirm(
-        `Are you sure you want to delete "${p.artist_name}"? This will also delete its canvas permanently.`
-      );
-
-      if (!confirmed) return;
-
-      try {
-        const response = await fetch(`/api/events/${p.id}`, {
-          method: "DELETE"
-        });
-
-        if (!response.ok) {
-          throw new Error("Could not delete project");
-        }
-
-        // Remove project from local list
-        projects = projects.filter(project => project.id !== p.id);
-
-        // If deleted project was selected, load another one
-        if (current && String(current.id) === String(p.id)) {
-        current = null;
-        clearTimeout(saveTimer);
-
-        if (projects.length) {
-          await loadProject(projects[0]);
-        } else {
-          canvas.clear();
-          canvas.renderAll();
-
-          document.querySelector("#pageName").textContent = "NO PROJECT";
-          document.querySelector("#status").textContent = "NO PROJECTS";
-
-          history.pushState({}, "", "/");
-        }
-      }
-
-        renderProjects();
-
-      } catch (error) {
-        console.error(error);
-        alert("Could not delete project.");
-      }
-    };
-
-    row.append(el, deleteBtn);
+    row.append(el);
     list.append(row);
   });
 }

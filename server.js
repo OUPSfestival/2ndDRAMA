@@ -322,7 +322,49 @@ app.put('/api/canvas/:key', async (req, res) => {
 });
 
 
+// UPDATE EVENT DETAILS
+app.put('/api/events/:id', async (req, res) => {
+    try {
+        const id = Number(req.params.id);
+        const { artist_name, event_date, event_time, latitude, longitude } = req.body;
 
+        if (
+            !Number.isInteger(id) ||
+            typeof artist_name !== 'string' ||
+            !artist_name.trim() ||
+            !/^\d{4}-\d{2}-\d{2}$/.test(event_date) ||
+            !/^\d{2}:\d{2}$/.test(event_time) ||
+            !Number.isFinite(latitude) ||
+            !Number.isFinite(longitude) ||
+            latitude < -90 || latitude > 90 ||
+            longitude < -180 || longitude > 180
+        ) {
+            return res.status(400).json({ error: 'Invalid event details' });
+        }
+
+        const result = await sql`
+            UPDATE events
+            SET
+                artist_name = ${artist_name.trim()},
+                event_date = ${event_date},
+                event_time = ${event_time},
+                latitude = ${latitude},
+                longitude = ${longitude}
+            WHERE id = ${id}
+            RETURNING *
+        `;
+
+        if (!result.length) {
+            return res.status(404).json({ error: 'Event not found' });
+        }
+
+        res.json(result[0]);
+
+    } catch (error) {
+        console.error('UPDATE EVENT ERROR:', error);
+        res.status(500).json({ error: 'Could not update event' });
+    }
+});
 
 // DELETE EVENT AND ITS ARTIST CANVAS
 app.delete('/api/events/:id', async (req, res) => {
