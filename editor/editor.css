@@ -43,8 +43,8 @@ nav {
 }
 
 #toolbar button svg {
-    width: 18px;
-    height: 18px;
+    width: 11px;
+    height: 11px;
     fill: none;
     stroke: currentColor;
     stroke-width: 1.8;
@@ -99,8 +99,41 @@ input {
   border: 1px solid #555;
 }
 
-#fontSize { width: 48px; padding: 5px; }
-#colour { width: 28px; height: 27px; padding: 1px; }
+#fontSize {
+    width: 60px;
+    height: 36px;
+    background: transparent;
+    color: inherit;
+    border: 1px solid #777;
+    border-radius: 6px;
+    text-align: center;
+    font-size: 14px;
+}
+
+#colour {
+    width: 38px;
+    height: 36px;
+    padding: 3px;
+    background: transparent;
+    border: 1px solid #777;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+/* TEXT BUTTONS */
+#bold, #italic, #underline {
+    width: 34px;
+    height: 36px;
+    border-radius: 5px;
+}
+
+/* SELECTED TOOL */
+#toolbar button.active {
+    background: #444;
+    color: white;
+    border-radius: 6px;
+}
+
 
 main {
   display: flex;
