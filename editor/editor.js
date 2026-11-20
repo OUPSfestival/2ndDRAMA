@@ -126,8 +126,6 @@ async function loadProject(p, updateURL = true) {
     document.querySelector("#toolbar").style.display =
         isPreview ? "none" : "flex";
 
-    document.querySelector("#preview").textContent =
-        isPreview ? "EDIT" : "PREVIEW ↗";
 
     canvas.selection = false;
 canvas.skipTargetFind = isPreview;
@@ -452,40 +450,7 @@ document.querySelector("#redo").onclick = () => {
   restore(state);
 };
 
-document.querySelector("#preview").onclick = () => {
-    if (!current) return;
 
-    const isPreview = document.body.classList.contains("preview");
-
-    // Require password when entering EDIT mode
-    if (isPreview && !editorUnlocked) {
-        document.querySelector("#passwordScreen").style.display = "flex";
-        return;
-    }
-
-    const newPreview = !isPreview;
-
-    document.body.classList.toggle("preview", newPreview);
-
-    updateProjectURL(current, !newPreview);
-
-    document.querySelector("#toolbar").style.display =
-        newPreview ? "none" : "flex";
-
-    document.querySelector("#preview").textContent =
-        newPreview ? "EDIT" : "PREVIEW ↗";
-
-    canvas.selection = !newPreview;
-    canvas.isDrawingMode = false;
-
-    canvas.forEachObject(obj => {
-        obj.selectable = !newPreview;
-        obj.evented = !newPreview;
-    });
-
-    canvas.discardActiveObject();
-    canvas.renderAll();
-};
 
 
 
@@ -566,36 +531,30 @@ init().catch(err => {
 
 
 // OUPS EDITOR PASSWORD
-(function () {
 
-  if (!window.location.pathname.endsWith("/edit")) {
-    return;
-  }
+let editorUnlocked = false;
 
-  const passwordForm = document.getElementById("passwordForm");
-  const passwordScreen = document.getElementById("passwordScreen");
+const passwordForm = document.getElementById("passwordForm");
+const passwordScreen = document.getElementById("passwordScreen");
 
-  if (!passwordForm || !passwordScreen) {
-    console.error("Password screen not found!");
-    return;
-  }
+const isEditorPage = location.pathname.endsWith("/edit");
 
-  const EDITOR_PASSWORD = "OU";
+if (passwordScreen) {
+    passwordScreen.style.display = isEditorPage ? "flex" : "none";
+}
 
-  passwordForm.addEventListener("submit", function (e) {
-    e.preventDefault();
+if (passwordForm) {
+    passwordForm.addEventListener("submit", function(e) {
+        e.preventDefault();
 
-    const enteredPassword =
-      document.getElementById("editorPassword").value;
+        const password = document.getElementById("editorPassword").value;
 
-    if (enteredPassword === EDITOR_PASSWORD) {
-      passwordScreen.style.display = "none";
-    } else {
-      document.getElementById("passwordError").textContent =
-        "Wrong password!";
-
-      document.getElementById("editorPassword").value = "";
-    }
-  });
-
-})();
+        if (password === "OU") {
+            editorUnlocked = true;
+            passwordScreen.style.display = "none";
+            document.getElementById("editorPassword").value = "";
+        } else {
+            document.getElementById("passwordError").textContent = "Wrong password!";
+        }
+    });
+}
