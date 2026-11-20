@@ -560,7 +560,7 @@ init().catch(err => {
 });
 
 
-const EDITOR_PASSWORD = "OUPS2027";
+const EDITOR_PASSWORD = "ROU";
 
 document.getElementById("passwordForm").addEventListener("submit", function(e) {
   e.preventDefault();
