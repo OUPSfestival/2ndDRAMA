@@ -228,6 +228,14 @@ body.preview .delete-project {
     display: none !important;
 }
 
+/* HIDE SCROLLBAR */
+* {
+    scrollbar-width: none;
+}
+
+*::-webkit-scrollbar {
+    display: none;
+}
 
 
 /* PASSWORD SCREEN */
