@@ -31,20 +31,63 @@
 
 
 
-    <nav id="toolbar">
-    <button data-tool="select">↖<small>V</small></button>
-    <button data-tool="text">T<small>T</small></button>
-    <button id="image">▧<small>I</small></button>
-    <button data-tool="draw">✎<small>D</small></button>
-    <button id="bold">B<small>B</small></button>
-    <button id="italic">I<small>I</small></button>
-    <button id="underline">U<small>U</small></button>
-    <button id="delete">×<small>X</small></button>
-    <button id="undo">↶<small>Z</small></button>
-    <button id="redo">↷<small>Y</small></button>
+  
+<nav id="toolbar">
 
+    <!-- SELECT -->
+    <button data-tool="select" title="Select">
+        <svg viewBox="0 0 24 24"><path d="M5 3l14 11-7 1-3 6z"/></svg>
+        <small>S</small>
+    </button>
+    <!-- IMAGE -->
+    <button id="image" title="Add image">
+        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        <small>I</small>
+    </button>
+    <!-- DRAW -->
+    <button data-tool="draw" title="Draw">
+        <svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 013 3L8 18l-4 1 1-4Z"/></svg>
+        <small>D</small>
+    </button>
+    <!-- TEXT -->
+    <button data-tool="text" title="Add text">
+        <svg viewBox="0 0 24 24"><path d="M4 7V4h16v3M12 4v16m-4 0h8"/></svg>
+        <small>T</small>
+    </button>
+    <!-- BOLD -->
+    <button id="bold" title="Bold">
+        <svg viewBox="0 0 24 24"><path d="M6 4h8a4 4 0 010 8H6zm0 8h9a4 4 0 010 8H6z"/></svg>
+        <small>B</small>
+    </button>
+    <!-- ITALIC -->
+    <button id="italic" title="Italic">
+        <svg viewBox="0 0 24 24"><path d="M19 4h-9M14 20H5m10-16L9 20"/></svg>
+        <small>I</small>
+    </button>
+    <!-- UNDERLINE -->
+    <button id="underline" title="Underline">
+        <svg viewBox="0 0 24 24"><path d="M6 4v7a6 6 0 0012 0V4M4 21h16"/></svg>
+        <small>U</small>
+    </button>
+    <!-- FONT SIZE -->
     <input type="number" id="fontSize" value="32" min="6" max="200" title="Font size">
-    <input type="color" id="colour" value="#111111" title="Colour">
+    <!-- COLOUR -->
+    <input type="color" id="colour" value="#111111" title="Text colour">
+    <!-- UNDO -->
+    <button id="undo" title="Undo">
+        <svg viewBox="0 0 24 24"><path d="M3 7v6h6M3 13a9 9 0 0115-6l2 2"/></svg>
+        <small>Z</small>
+    </button>
+    <!-- REDO -->
+    <button id="redo" title="Redo">
+        <svg viewBox="0 0 24 24"><path d="M21 7v6h-6m6 0A9 9 0 006 7l-2 2"/></svg>
+        <small>Y</small>
+    </button>
+    <!-- DELETE -->
+    <button id="delete" title="Delete">
+        <svg viewBox="0 0 24 24"><path d="M3 6h18M8 6V4h8v2m3 0-1 14H6L5 6m4 4v6m6-6v6"/></svg>
+        <small>X</small>
+    </button>
     
   </nav>
 </header>
