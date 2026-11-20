@@ -8,7 +8,10 @@ const app = express();
 
 // Allow GitHub Pages to access the API
 app.use(cors({
-    origin: 'https://oupsfestival.github.io',
+    origin: [
+        'https://oupsfestival.github.io',
+        'https://2nd.oupsfestival.be'
+    ],
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     credentials: true
 }));
