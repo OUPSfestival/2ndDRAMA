@@ -332,6 +332,15 @@ document.querySelector("#delete").onclick = () => {
   if (obj) canvas.remove(obj);
 };
 
+
+document.querySelector("#colourButton").onclick = () => {
+    document.querySelector("#colour").click();
+};
+
+document.querySelector("#colour").oninput = e => {
+    // your existing code stays here
+};
+
 document.querySelector("#colour").oninput = e => {
   const obj = canvas.getActiveObject();
   if (!obj) return;
