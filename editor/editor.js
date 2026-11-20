@@ -561,11 +561,13 @@ init().catch(err => {
 
 
 // PASSWORD PROTECTION — EDITOR ONLY
-if (window.location.pathname.endsWith("/edit")) {
+const passwordForm = document.getElementById("passwordForm");
+
+if (passwordForm) {
 
   const EDITOR_PASSWORD = "OU";
 
-  document.getElementById("passwordForm").addEventListener("submit", function(e) {
+  passwordForm.addEventListener("submit", function(e) {
     e.preventDefault();
 
     const password = document.getElementById("editorPassword").value;
