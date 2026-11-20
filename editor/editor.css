@@ -227,3 +227,46 @@ body.preview #toolbar,
 body.preview .delete-project {
     display: none !important;
 }
+
+
+
+/* PASSWORD SCREEN */
+#passwordScreen {
+  position: fixed;
+  inset: 0;
+  background: #171717;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 99999;
+  font-family: Arial, sans-serif;
+}
+
+.passwordBox {
+  background: white;
+  padding: 35px;
+  border-radius: 12px;
+  text-align: center;
+  width: 280px;
+}
+
+.passwordBox input {
+  padding: 12px;
+  width: 100%;
+  box-sizing: border-box;
+  margin: 15px 0;
+}
+
+.passwordBox button {
+  padding: 12px;
+  width: 100%;
+  background: #c5a04b;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+#passwordError {
+  color: red;
+  margin-top: 10px;
+}

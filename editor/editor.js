@@ -558,3 +558,19 @@ init().catch(err => {
   document.querySelector("#status").textContent = "LOAD ERROR";
   console.error(err);
 });
+
+
+const EDITOR_PASSWORD = "OUPS2027";
+
+document.getElementById("passwordForm").addEventListener("submit", function(e) {
+  e.preventDefault();
+
+  const password = document.getElementById("editorPassword").value;
+
+  if (password === EDITOR_PASSWORD) {
+    document.getElementById("passwordScreen").style.display = "none";
+  } else {
+    document.getElementById("passwordError").textContent = "Wrong password!";
+    document.getElementById("editorPassword").value = "";
+  }
+});
