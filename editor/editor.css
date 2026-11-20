@@ -1,22 +1,31 @@
-* { box-sizing: border-box; }
 
-body {
-  margin: 0;
-  background: #111;
-  color: #eee;
-  font: 12px monospace;
-  overflow: hidden;
+* {
+    box-sizing: border-box;
+    scrollbar-width: none;
 }
 
+*::-webkit-scrollbar {
+    display: none;
+}
+
+body {
+    margin: 0;
+    background: #111;
+    color: #eee;
+    font: 12px monospace;
+    overflow: hidden;
+}
+
+/* HEADER */
 header {
-  height: 68px;
-  padding: 0 16px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  border-bottom: 1px solid #555;
-  background: #111;
+    height: 68px;
+    padding: 0 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    border-bottom: 1px solid #555;
+    background: #111;
 }
 
 .logo {
@@ -25,306 +34,242 @@ header {
     font-weight: bold;
     letter-spacing: -1.5px;
     color: white;
-    margin: 0;
+    text-decoration: none;
 }
 
-header .logo small {
-  font-family: Arial, sans-serif;
-  display: block;
-  font-size: 9px;
-  color: #c684c0 !important;
-  margin-top: 4px;
-}
-
-nav {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-#toolbar button svg {
-    width: 15px;
-    height: 15px;
-    fill: none;
-    stroke: currentColor;
-    stroke-width: 1.8;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-}
-
-#toolbar button {
+/* TOOLBAR */
+#toolbar {
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 3px;
+    gap: 8px;
+    white-space: nowrap;
 }
 
 button {
-  color: #eee;
-  background: none;
-  border: 0;
-  cursor: pointer;
-  font: bold 15px monospace;
+    color: #eee;
+    background: none;
+    border: 0;
+    cursor: pointer;
+    font: bold 11px monospace;
 }
 
-nav button {
-  min-width: 25px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
+#toolbar button {
+    padding: 8px 5px;
+    border-radius: 4px;
 }
 
-button small {
-  color: #888;
-  font-size: 9px;
+#toolbar button:hover,
+#toolbar button.active {
+    background: #444;
+    color: #d5bb16;
 }
 
-button:hover, button.active {
-  color: #fff;
-  background: #444;
-}
-
-#preview {
-  border: 1px solid #777;
-  padding: 9px;
-  font-size: 10px;
-  white-space: nowrap;
-}
-
-input {
-  background: #222;
-  color: white;
-  border: 1px solid #555;
+#toolbar .separator {
+    color: #888;
+    font-size: 16px;
 }
 
 #fontSize {
-    width: 60px;
-    height: 36px;
+    width: 48px;
+    padding: 5px;
     background: transparent;
     color: inherit;
+    border: 1px solid #777;
+    border-radius: 4px;
     text-align: center;
-    font-size: 14px;
+    font: 12px monospace;
 }
 
 #colour {
     width: 38px;
-    height: 36px;
+    height: 30px;
     padding: 3px;
     background: transparent;
     border: 1px solid #777;
-    border-radius: 6px;
+    border-radius: 5px;
     cursor: pointer;
 }
 
-/* TEXT BUTTONS */
-#bold, #italic, #underline {
-    width: 34px;
-    height: 36px;
-    border-radius: 5px;
-    color: rgb(128, 128, 128);
-}
-
-/* SELECTED TOOL */
-#toolbar button.active {
-    background: #444;
-    color: rgb(213, 187, 22);
-    border-radius: 6px;
-}
-
-
+/* MAIN LAYOUT */
 main {
-  display: flex;
-  height: calc(100dvh - 68px);
+    display: flex;
+    height: calc(100dvh - 68px);
 }
 
 aside {
-  width: 210px;
-  flex-shrink: 0;
-  padding: 20px 12px;
-  border-right: 1px solid #555;
-  overflow-y: auto;
+    width: 210px;
+    flex-shrink: 0;
+    padding: 20px 12px;
+    border-right: 1px solid #555;
+    overflow-y: auto;
 }
 
 aside label {
-  color: #888;
-  font-weight: bold;
+    color: #888;
+    font-weight: bold;
 }
 
 #projects {
-  margin-top: 18px;
+    margin-top: 18px;
 }
 
 .project {
-  padding: 10px 7px;
-  cursor: pointer;
-  color: #aaa;
+    padding: 10px 7px;
+    cursor: pointer;
+    color: #aaa;
 }
 
 .project.active {
-  background: #eee;
-  color: #111;
-  font-weight: bold;
+    background: #eee;
+    color: #111;
+    font-weight: bold;
 }
 
-
 .project-row {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
 }
 
 .project-row .project {
-  flex: 1;
-  min-width: 0;
-  cursor: pointer;
+    flex: 1;
+    min-width: 0;
 }
 
 .delete-project {
-  border: 0;
-  background: transparent;
-  color: #c0392b;
-  cursor: pointer;
-  font-size: 10px;
-  font-weight: bold;
-  padding: 8px;
-  flex-shrink: 0;
+    color: #c0392b;
+    font-size: 10px;
+    font-weight: bold;
+    padding: 8px;
 }
 
 .delete-project:hover {
-  background: #c0392b;
-  color: white;
+    background: #c0392b;
+    color: white;
 }
 
-
+/* WORKSPACE */
 .workspace {
-  flex: 1;
-  min-width: 0;
-  background: #292929;
-  padding: 12px;
-  display: flex;
-  flex-direction: column;
+    flex: 1;
+    min-width: 0;
+    background: #292929;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
 }
 
 .page-info {
-  display: flex;
-  justify-content: space-between;
-  color: #999;
-  padding-bottom: 10px;
-  flex-shrink: 0;
+    display: flex;
+    justify-content: space-between;
+    color: #999;
+    padding-bottom: 10px;
+    flex-shrink: 0;
 }
 
 #canvasScroll {
-  flex: 1;
-  min-height: 0;
-  overflow-y: auto;
-  overflow-x: hidden;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
 }
 
 #canvas {
-  display: block;
-  max-width: 100%;
+    display: block;
+    max-width: 100%;
 }
 
-.logo {
-  color: white;
-  text-decoration: none;
-  font-size: 24px;
-  font-weight: bold;
-  letter-spacing: -2px;
-}
-
-body.preview #toolbar {
-  display: none;
-}
-
-body.preview header {
-  justify-content: flex-start;
-}
-
-body.preview main {
-  height: calc(100dvh - 68px);
-}
-
-body.preview aside {
-  display: block;
-}
-
-body.preview .page-info {
-  display: flex;
-}
-
-body.preview .workspace {
-  padding: 12px;
-}
-
-body.preview #status {
-  display: none;
-}
-
-body.preview #canvasScroll {
-  background: #292929;
-}
-
-
-
+/* PREVIEW */
 body.preview #toolbar,
 body.preview .delete-project {
     display: none !important;
 }
 
-/* HIDE SCROLLBAR */
-* {
-    scrollbar-width: none;
+body.preview header {
+    justify-content: flex-start;
 }
 
-*::-webkit-scrollbar {
+body.preview aside {
+    display: block;
+}
+
+body.preview #status {
     display: none;
 }
 
+body.preview #canvasScroll {
+    background: #292929;
+}
 
 /* PASSWORD SCREEN */
 #passwordScreen {
-  position: fixed;
-  inset: 0;
-  background: #171717;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 99999;
-  font-family: Arial, sans-serif;
+    position: fixed;
+    inset: 0;
+    background: #171717;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 99999;
+    font-family: Arial, sans-serif;
 }
 
 .passwordBox {
-  background: white;
-  padding: 35px;
-  border-radius: 12px;
-  text-align: center;
-  width: 280px;
+    background: white;
+    color: #111;
+    padding: 35px;
+    border-radius: 12px;
+    text-align: center;
+    width: 280px;
 }
 
 .passwordBox input {
-  padding: 12px;
-  width: 100%;
-  box-sizing: border-box;
-  margin: 15px 0;
+    padding: 12px;
+    width: 100%;
+    margin: 15px 0;
+    background: white;
+    color: #111;
 }
 
 .passwordBox button {
-  padding: 12px;
-  width: 100%;
-  background: #c5a04b;
-  border: none;
-  cursor: pointer;
-  font-weight: bold;
+    padding: 12px;
+    width: 100%;
+    background: #c5a04b;
+    color: #111;
+    font-weight: bold;
 }
 
 #passwordError {
-  color: red;
-  margin-top: 10px;
+    color: red;
+    margin-top: 10px;
+}
+
+/* MOBILE */
+@media (max-width: 700px) {
+    header {
+        padding: 0 8px;
+        gap: 8px;
+    }
+
+    #toolbar {
+        justify-content: flex-start;
+        overflow-x: auto;
+        gap: 5px;
+    }
+
+    #toolbar button {
+        padding: 8px 4px;
+    }
+
+    aside {
+        width: 110px;
+        padding: 12px 6px;
+    }
+
+    .workspace {
+        padding: 6px;
+    }
 }
