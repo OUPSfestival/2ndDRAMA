@@ -560,17 +560,22 @@ init().catch(err => {
 });
 
 
-const EDITOR_PASSWORD = "ROU";
+// PASSWORD PROTECTION — EDITOR ONLY
+if (window.location.pathname.endsWith("/edit")) {
 
-document.getElementById("passwordForm").addEventListener("submit", function(e) {
-  e.preventDefault();
+  const EDITOR_PASSWORD = "OU";
 
-  const password = document.getElementById("editorPassword").value;
+  document.getElementById("passwordForm").addEventListener("submit", function(e) {
+    e.preventDefault();
 
-  if (password === EDITOR_PASSWORD) {
-    document.getElementById("passwordScreen").style.display = "none";
-  } else {
-    document.getElementById("passwordError").textContent = "Wrong password!";
-    document.getElementById("editorPassword").value = "";
-  }
-});
+    const password = document.getElementById("editorPassword").value;
+
+    if (password === EDITOR_PASSWORD) {
+      document.getElementById("passwordScreen").style.display = "none";
+    } else {
+      document.getElementById("passwordError").textContent = "Wrong password!";
+      document.getElementById("editorPassword").value = "";
+    }
+  });
+
+}
