@@ -1,6 +1,4 @@
-const BASE_PATH = location.hostname === "oupsfestival.github.io"
-    ? "/2ndDRAMA"
-    : "";
+const BASE_PATH = "";
 
 const requestedRoute = sessionStorage.getItem("projectRoute");
 
