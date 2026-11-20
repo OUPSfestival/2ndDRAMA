@@ -336,9 +336,6 @@ document.querySelector("#colourButton").onclick = () => {
     document.querySelector("#colour").showPicker();
 };
 
-document.querySelector("#colour").oninput = e => {
-    // your existing code stays here
-};
 
 document.querySelector("#colour").oninput = e => {
   const obj = canvas.getActiveObject();
