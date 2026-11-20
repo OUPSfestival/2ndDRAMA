@@ -183,17 +183,6 @@ aside label {
     min-width: 0;
 }
 
-.delete-project {
-    color: #c0392b;
-    font-size: 10px;
-    font-weight: bold;
-    padding: 8px;
-}
-
-.delete-project:hover {
-    background: #c0392b;
-    color: white;
-}
 
 /* WORKSPACE */
 .workspace {
@@ -211,6 +200,7 @@ aside label {
     color: #999;
     padding-bottom: 10px;
     flex-shrink: 0;
+    font-size: 15px;
 }
 
 #canvasScroll {
