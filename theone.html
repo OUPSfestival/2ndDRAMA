@@ -7,35 +7,77 @@
 <title>OUPS Admin</title>
 
 <style>
+
+* {
+    box-sizing: border-box;
+}
+
 body {
     font-family: Arial, sans-serif;
-    padding: 20px;
+    padding: 15px;
     max-width: 750px;
     margin: auto;
+    background: #f7f7f7;
+}
+
+h2 {
+    font-size: 23px;
 }
 
 input {
     display: block;
     width: 100%;
-    box-sizing: border-box;
-    padding: 9px;
-    margin: 5px 0 12px;
+    padding: 13px;
+    margin: 6px 0 16px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    background: white;
+}
+
+label {
+    font-size: 14px;
+    font-weight: bold;
 }
 
 button {
-    padding: 9px 15px;
+    padding: 13px 18px;
     margin: 5px 5px 5px 0;
+    font-size: 15px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    background: white;
     cursor: pointer;
 }
 
 .project {
-    border: 1px solid #ccc;
-    padding: 15px;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 16px;
     margin: 15px 0;
 }
 
+.project h3 {
+    margin-top: 0;
+    font-size: 19px;
+}
+
+.save {
+    background: #222;
+    color: white;
+    border-color: #222;
+}
+
 .delete {
-    color: red;
+    color: #c00;
+    border-color: #c00;
+}
+
+.status {
+    display: block;
+    margin-top: 10px;
+    font-size: 14px;
 }
 
 #admin {
@@ -43,8 +85,42 @@ button {
 }
 
 #login {
-    max-width: 300px;
-    margin: 100px auto;
+    max-width: 350px;
+    margin: 80px auto;
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+#login button {
+    width: 100%;
+    background: #222;
+    color: white;
+}
+
+/* MOBILE */
+@media (max-width: 600px) {
+    body {
+        padding: 12px;
+    }
+
+    #login {
+        margin: 50px auto;
+    }
+
+    .project {
+        padding: 14px;
+    }
+
+    .project button {
+        width: 100%;
+        margin: 6px 0;
+        padding: 15px;
+    }
+
+    input {
+        padding: 14px;
+    }
 }
 
 </style>
@@ -206,9 +282,13 @@ document.getElementById("projects").addEventListener("click", async function(e) 
 
     // DELETE PROJECT
     if (e.target.classList.contains("delete")) {
-        if (!confirm("Are you sure you want to permanently delete this project and its canvas?")) {
-            return;
-        }
+        const confirmation = prompt(
+        `To permanently delete "${card.querySelector(".name").value}", type DELETE:`
+         );
+
+        if (confirmation !== "DELETE") {
+        return;
+}
 
         status.textContent = " Deleting...";
 
